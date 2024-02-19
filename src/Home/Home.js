@@ -15,7 +15,8 @@ const Home = ({ existingCodes }) => {
             if (!existingCodes.includes(uniqueCode)) {
                 setGeneratedCode(uniqueCode);
                 try {
-                    await addDoc(collection(db, "produse"), { Denumire: name, Cod: uniqueCode });
+                    const timestamp = Date.now();
+                    await addDoc(collection(db, "produse"), { Denumire: name, Cod: uniqueCode, created: timestamp });
                 } catch (e) {
                     console.error("Error adding document: ", e);
                 }

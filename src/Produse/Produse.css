@@ -1,7 +1,13 @@
+.date {
+    margin-top: .2rem;
+    font-size: 1.3rem;
+}
+
 .item {
     margin-top: 1rem;
     font-size: 1.4rem;
     width: 60rem;
+    display: flex;
 }
 
 .margin {
@@ -13,9 +19,53 @@
 
 .produse-show {
     width: 80vw;
+    display: flex;
 }
 
 .margin-loading {
     margin: auto;
     margin-top: 1rem;
+}
+
+.created {
+    font-size: 1rem;
+}
+
+.selected-labels {
+    margin-top: 20px;
+}
+
+.label-container {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid black;
+}
+
+.label {
+    width: calc(20% - 20px);
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.label-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.label button {
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+@media print {
+    .label {
+        width: calc(20% - 20px);
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
 }
