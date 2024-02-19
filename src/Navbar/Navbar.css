@@ -6,11 +6,17 @@
     flex-direction: column;
     align-items: center;
     margin-right: 1rem;
+    position: fixed;
+    justify-content: space-between;
+}
+
+.buttons-container {
+    width: 90%;
 }
 
 .navbar-button {
     background-color: aliceblue;
-    width: 80%;
+    width: 100%;
     height: 4rem;
     margin-top: 1rem;
     border-radius: 1rem;
@@ -18,7 +24,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     cursor: pointer;
     text-decoration: none;
     color: black;
@@ -27,4 +33,8 @@
 
 .navbar-button:hover {
     background-color: rgba(234, 239, 244, 0.614);
+}
+
+.logo {
+    width: 15rem;
 }

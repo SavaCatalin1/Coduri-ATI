@@ -7,8 +7,11 @@ const Navbar = () => {
 
     return (
         <div className='navbar-container noselect'>
-            <Link to={'/'} className='navbar-button'><div>Home</div></Link>
-            <Link to={'/produse'} className='navbar-button'><div>Produse</div></Link>
+            <div className='buttons-container'>
+                <Link to={'/'} className='navbar-button'><div>Home</div></Link>
+                <Link to={'/produse'} className='navbar-button'><div>Produse</div></Link>
+            </div>
+            <img src={require('../ATI LOGO.png')} className='logo' />
         </div>
     )
 }

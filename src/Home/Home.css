@@ -8,7 +8,7 @@
 
 .group {
     margin-top: 1rem;
-    font-size: 1.7rem;
+    font-size: 1.5rem;
 }
 
 .categorie-select {
@@ -20,6 +20,7 @@
     flex-direction: column;
     margin-top: 1rem;
     font-size: 2.2rem;
+    align-items: center;
 }
 
 .noselect {
@@ -29,12 +30,13 @@
 .button {
     width: 15rem;
     background-color: aliceblue;
-    font-size: 1.7rem;
+    font-size: 1.5rem;
     font-weight: 600;
     cursor: pointer;
     border: 1px solid black;
     border-radius: 1rem;
     margin-top: .5rem;
+    padding: .3rem;
 }
 
 .button:hover {

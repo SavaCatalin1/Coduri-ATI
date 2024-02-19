@@ -27,13 +27,15 @@ function App() {
   return (
     <div>
       <BrowserRouter>
-        <div className="page-flex">
+        <div >
           <Navbar />
-          <Routes>
-            <Route path='/' element={<Home existingCodes={existingCodes} />} />
-            <Route path='/produse' element={<Produse produse={produse} />} />
-            {/* <Route path='*' element={<Notfound />} /> */}
-          </Routes>
+          <div className="page-flex">
+            <Routes>
+              <Route path='/' element={<Home existingCodes={existingCodes} />} />
+              <Route path='/produse' element={<Produse produse={produse} />} />
+              {/* <Route path='*' element={<Notfound />} /> */}
+            </Routes>
+          </div>
         </div>
       </BrowserRouter>
     </div>
