@@ -41,7 +41,7 @@ const Produse = ({ produse }) => {
 
             </div>
             <div className='produse-show'>
-                <div>{filteredProduse ? filteredProduse.map((produs, index) => (
+                <div>{filteredProduse && filteredProduse.map((produs, index) => (
                     <div className='item' key={produs.id}>
                         <div>
                             <div><b>Denumire:</b> {produs.Denumire}</div>
@@ -54,8 +54,9 @@ const Produse = ({ produse }) => {
                             </button>
                         </div>
                     </div>
-                )) : <ClockLoader color="#36d7b7" className='margin-loading' />}
+                ))}
                 </div>
+                {!filteredProduse && <ClockLoader color="#36d7b7" className='margin-loading' />}
                 <div>
                     {filteredProduse && <div className="selected-labels">
                         <h2>Selected Labels:</h2>
