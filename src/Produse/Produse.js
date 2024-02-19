@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Produse.css';
 import { ClockLoader } from "react-spinners"
+import SearchIcon from '@mui/icons-material/Search';
 
 const Produse = ({ produse }) => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -38,7 +39,7 @@ const Produse = ({ produse }) => {
                     value={searchQuery}
                     onChange={handleSearchChange}
                     className='input' />
-
+                <SearchIcon fontSize='large' sx={{ color: "#000080" }} />
             </div>
             <div className='produse-show'>
                 <div>{filteredProduse && filteredProduse.map((produs, index) => (
@@ -56,7 +57,7 @@ const Produse = ({ produse }) => {
                     </div>
                 ))}
                 </div>
-                {!filteredProduse && <ClockLoader color="#36d7b7" className='margin-loading' />}
+                {!filteredProduse && <ClockLoader color="#000080" className='margin-loading' />}
                 <div>
                     {filteredProduse && <div className="selected-labels">
                         <h2>Selected Labels:</h2>
