@@ -22,7 +22,7 @@ function App() {
         })
     }
     fetch()
-  }, [produse])
+  }, [])
 
   return (
     <div>

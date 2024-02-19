@@ -6,7 +6,7 @@ import { addDoc, collection } from '@firebase/firestore'
 const Home = ({ existingCodes }) => {
     const [category, setCategory] = useState("101");
     const [generatedCode, setGeneratedCode] = useState('');
-    const [name, setName] = useState('');
+    const [name, setName] = useState(null);
 
     const generateUniqueCode = async () => {
         const randomDigits = Math.floor(Math.random() * 10000000); // Generate 7 random digits
@@ -35,7 +35,10 @@ const Home = ({ existingCodes }) => {
 
     const handleGenerateCode = () => {
         if (category) {
-            generateUniqueCode();
+            if (name)
+                generateUniqueCode();
+            else
+                alert("Introduceti denumirea produsului!")
         } else {
             alert('Alegeti o categorie!');
         }
