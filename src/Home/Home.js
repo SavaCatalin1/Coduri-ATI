@@ -3,6 +3,7 @@ import './Home.css'
 import { db } from '../firebase'
 import { addDoc, collection } from '@firebase/firestore'
 
+
 const Home = ({ existingCodes, fetch }) => {
     const [category, setCategory] = useState("101");
     const [generatedCode, setGeneratedCode] = useState('');
@@ -48,11 +49,11 @@ const Home = ({ existingCodes, fetch }) => {
     return (
         <div className='home-flex'>
             <div>
-                <div className='group noselect'><b>Denumire produs</b></div>
+                <div className='group noselect'>Denumire produs</div>
                 <input onChange={(e) => setName(e.target.value)} className='width'></input>
             </div>
             <div>
-                <div className='group noselect'><b>Categorie</b></div>
+                <div className='group noselect'>Categorie</div>
                 <select value={category} onChange={handleCategoryChange} className='categorie-select noselect width'>
                     <option value={"101"}>Panouri Fotovoltaice</option>
                     <option value={"102"}>Structura Panouri Fotovoltaice</option>

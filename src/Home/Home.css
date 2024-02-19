@@ -9,6 +9,10 @@
 .group {
     margin-top: 1rem;
     font-size: 1.4rem;
+    color: #000080;
+    font-weight: 700;
+    margin-bottom: .3rem;
+
 }
 
 .categorie-select {
@@ -29,14 +33,15 @@
 
 .button {
     width: 15rem;
-    background-color: aliceblue;
+    background-color: #FAF9F6;
     font-size: 1.5rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
-    border: 1px solid black;
+    border: 1px solid rgb(209, 209, 209);
     border-radius: 1rem;
     margin-top: .5rem;
     padding: .3rem;
+    color: #010149;
 }
 
 .button:hover {
@@ -46,4 +51,7 @@
 .width {
     width: 20rem;
     font-size: 1.5rem;
+    padding-inline: .3rem;
+    padding-top: .1rem;
+    padding-bottom: .1rem;
 }
