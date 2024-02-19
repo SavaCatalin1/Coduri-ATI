@@ -40,7 +40,7 @@ const Produse = ({ produse }) => {
                     className='input' />
 
             </div>
-            <div className='produse-show margin'>
+            <div className='produse-show'>
                 <div>{filteredProduse ? filteredProduse.map((produs, index) => (
                     <div className='item' key={produs.id}>
                         <div>
@@ -54,24 +54,27 @@ const Produse = ({ produse }) => {
                             </button>
                         </div>
                     </div>
-                )) : <ClockLoader color="#36d7b7" className='margin-loading' />}</div>
-                {filteredProduse && <div className="selected-labels">
-                    <h2>Selected Labels:</h2>
-                    <button onClick={handlePrintLabels}>
+                )) : <ClockLoader color="#36d7b7" className='margin-loading' />}
+                </div>
+                <div>
+                    {filteredProduse && <div className="selected-labels">
+                        <h2>Selected Labels:</h2>
+                        {/* <button onClick={handlePrintLabels}>
                         Print
-                    </button>
-                    <div className="label-container">
-                        {selectedLabels.map((label, index) => (
-                            <div key={index} className="label">
-                                <div className="label-content">
-                                    <span>{label.Denumire}</span>
-                                    <span>{label.Cod}</span>
+                    </button> */}
+                        <div className="label-container">
+                            {selectedLabels.map((label, index) => (
+                                <div key={index} className="label">
+                                    <div className="label-content">
+                                        <span>{label.Denumire}</span>
+                                        <span>{label.Cod}</span>
+                                    </div>
+                                    <button onClick={() => handleRemoveFromLabels(index)}>Remove</button>
                                 </div>
-                                <button onClick={() => handleRemoveFromLabels(index)}>Sterge</button>
-                            </div>
-                        ))}
-                    </div>
-                </div>}
+                            ))}
+                        </div>
+                    </div>}
+                </div>
             </div>
 
         </div>

@@ -37,4 +37,5 @@
 
 .logo {
     width: 15rem;
+    user-select: none;
 }

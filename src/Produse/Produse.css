@@ -6,8 +6,10 @@
 .item {
     margin-top: 1rem;
     font-size: 1.4rem;
-    width: 60rem;
+    width: 50rem;
+    margin-right: 2rem;
     display: flex;
+    justify-content: space-between;
 }
 
 .margin {
@@ -36,23 +38,52 @@
 }
 
 .label-container {
+    width: 210mm;
+    height: 297mm;
+    margin: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
     display: flex;
     flex-wrap: wrap;
-    border: 1px solid black;
+    /* Enable wrapping */
+    justify-content: flex-start;
+    /* Align items at the start of the container */
+    align-items: flex-start;
+    /* Align items at the start of the container */
 }
 
 .label {
     width: calc(20% - 20px);
+    /* Adjusted to fit 5 labels per row */
     margin: 10px;
     padding: 10px;
     border: 1px solid #ccc;
     box-sizing: border-box;
+    position: relative;
+    background-color: white;
+    font-family: BarcodeFont, Arial, sans-serif;
+    /* Use your barcode font */
 }
 
 .label-content {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    height: 100%;
+}
+
+.label span {
+    display: block;
+}
+
+.barcode {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    background-color: #000;
+    height: 3px;
 }
 
 .label button {
@@ -61,6 +92,14 @@
 }
 
 @media print {
+    .label-container {
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+
     .label {
         width: calc(20% - 20px);
         margin: 10px;
