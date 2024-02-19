@@ -8,11 +8,10 @@
 
 .group {
     margin-top: 1rem;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     color: #000080;
-    font-weight: 700;
+    font-weight: 600;
     margin-bottom: .3rem;
-
 }
 
 .categorie-select {
@@ -34,8 +33,8 @@
 .button {
     width: 15rem;
     background-color: #FAF9F6;
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.6rem;
+    font-weight: 500;
     cursor: pointer;
     border: 1px solid rgb(209, 209, 209);
     border-radius: 1rem;

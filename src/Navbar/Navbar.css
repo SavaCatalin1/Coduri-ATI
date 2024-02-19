@@ -1,5 +1,6 @@
 .navbar-container {
-    width: 12%;
+    min-width: 12%;
+    max-width: 12%;
     background-color: #FAF9F6;
     height: 100vh;
     display: flex;
@@ -62,4 +63,10 @@
     -khtml-user-drag: none;
     -moz-user-drag: none;
     -o-user-drag: none;
+}
+
+@media print{
+    .navbar-container{
+        display: none;
+    }
 }

@@ -1,3 +1,6 @@
+@import url('https://fonts.cdnfonts.com/css/idautomationhc39m');
+
+
 .date {
     margin-top: .2rem;
     font-size: 1.3rem;
@@ -20,9 +23,14 @@
     margin-top: 1rem;
     font-size: 1.4rem;
     width: 50rem;
-    margin-right: 2rem;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-right: 2rem;
+    background-color: #FAF9F6;
+    padding: 1rem;
+    border-radius: 1rem;
+    color: #000080;
 }
 
 .margin {
@@ -30,6 +38,12 @@
     flex-direction: column;
     align-items: center;
     margin-top: 1rem;
+    margin-left: 1rem;
+}
+
+.prod-list {
+    min-width: 42%;
+    max-width: 42%;
 }
 
 .produse-show {
@@ -38,12 +52,20 @@
 }
 
 .margin-loading {
-    margin: auto;
     margin-top: 1rem;
+    margin-left: 6rem;
 }
 
 .created {
     font-size: 1rem;
+}
+
+.print-btn {
+    cursor: pointer;
+}
+
+.print-btn:hover {
+    color: gray;
 }
 
 .selected-labels {
@@ -54,7 +76,6 @@
     width: 210mm;
     height: 297mm;
     margin: auto;
-    padding: 20px;
     box-sizing: border-box;
     border: 1px solid #ccc;
     display: flex;
@@ -64,19 +85,50 @@
     /* Align items at the start of the container */
     align-items: flex-start;
     /* Align items at the start of the container */
+    padding: 1rem;
 }
 
 .label {
-    width: calc(20% - 20px);
-    /* Adjusted to fit 5 labels per row */
-    margin: 10px;
+    width: calc(25% - 10px);
+    /* Adjusted to fit 4 labels per row */
+    height: calc(100% / 12);
+    /* Adjusted to fit 12 rows */
+    margin-inline: 5px;
     padding: 10px;
     border: 1px solid #ccc;
     box-sizing: border-box;
     position: relative;
     background-color: white;
-    font-family: BarcodeFont, Arial, sans-serif;
+    font-family: Arial, sans-serif;
+    display: flex;
+    font-size: 1.2rem;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     /* Use your barcode font */
+}
+
+.label-title {
+    font-size: .9rem;
+}
+
+.add-label {
+    width: 3rem;
+    cursor: pointer;
+    border: none;
+    background-color: #000080;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.delete-label {
+    cursor: pointer;
+    position: absolute;
+    bottom: 0;
+    right: 2%;
 }
 
 .label-content {
@@ -90,13 +142,8 @@
 }
 
 .barcode {
-    position: absolute;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    background-color: #000;
-    height: 3px;
+    font-family: 'IDAutomationHC39M', sans-serif;
+    font-size: 1.5rem;
 }
 
 .label button {
@@ -105,6 +152,10 @@
 }
 
 @media print {
+    .delete-label {
+        display: none;
+    }
+
     .label-container {
         width: 210mm;
         height: 297mm;
@@ -113,11 +164,4 @@
         border: none;
     }
 
-    .label {
-        width: calc(20% - 20px);
-        margin: 10px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-    }
 }
