@@ -1,0 +1,47 @@
+.home-flex {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    align-items: center;
+    width: 90%;
+}
+
+.group {
+    margin-top: 1rem;
+    font-size: 1.7rem;
+}
+
+.categorie-select {
+    margin-bottom: 1rem;
+}
+
+.generated-flex {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+    font-size: 2.2rem;
+}
+
+.noselect {
+    user-select: none;
+}
+
+.button {
+    width: 15rem;
+    background-color: aliceblue;
+    font-size: 1.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid black;
+    border-radius: 1rem;
+    margin-top: .5rem;
+}
+
+.button:hover {
+    background-color: rgb(221, 228, 234);
+}
+
+.width {
+    width: 20rem;
+    font-size: 1.5rem;
+}

@@ -1,0 +1,21 @@
+.item {
+    margin-top: 1rem;
+    font-size: 1.4rem;
+    width: 60rem;
+}
+
+.margin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.produse-show {
+    width: 80vw;
+}
+
+.margin-loading {
+    margin: auto;
+    margin-top: 1rem;
+}

@@ -1,23 +1,41 @@
-import logo from './logo.svg';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
+import Home from "./Home/Home";
+import Navbar from "./Navbar/Navbar";
+import Produse from "./Produse/Produse";
+import { useEffect, useState } from "react";
+import { collection, getDocs } from "@firebase/firestore";
+import { db } from "./firebase";
 
 function App() {
+  const [existingCodes, setExistingCodes] = useState(null);
+  const [produse, setProduse] = useState(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      await getDocs(collection(db, "produse"))
+        .then((querySnapshot) => {
+          const newData = querySnapshot.docs
+            .map((doc) => ({ ...doc.data() }));
+          setExistingCodes(newData.map((coduri) => coduri.Cod))
+          setProduse(newData);
+        })
+    }
+    fetch()
+  }, [produse])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <BrowserRouter>
+        <div className="page-flex">
+          <Navbar />
+          <Routes>
+            <Route path='/' element={<Home existingCodes={existingCodes} />} />
+            <Route path='/produse' element={<Produse produse={produse} />} />
+            {/* <Route path='*' element={<Notfound />} /> */}
+          </Routes>
+        </div>
+      </BrowserRouter>
     </div>
   );
 }
