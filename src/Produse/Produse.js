@@ -174,7 +174,7 @@ const Produse = ({ produse }) => {
                             {selectedLabels.map((label, index) => (
                                 <div key={index} className="label">
                                     <div className="label-content">
-                                        <span className='barcode'>{label.Cod}</span>
+                                        <span className='barcode'>({label.Cod})</span>
                                         {/* <Barcode value={label.Cod} width={4} height={100} margin={0} textMargin={0}/> */}
                                         <span className='label-title'>{label.Denumire}</span>
                                     </div>
