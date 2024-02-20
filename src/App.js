@@ -9,8 +9,9 @@ import { db } from "./firebase";
 import Notfound from "./Notfound/Notfound";
 
 function App() {
+  console.log(Date.now())
   const [existingCodes, setExistingCodes] = useState(null);
-  const [produse, setProduse] = useState(null);
+  const [produse, setProduse] = useState([{ Denumire: "Obj1", Cod: "6463797584", Created: 1708408307469 },{ Denumire: "Obj2", Cod: "6463797584", Created:1708408307472 }]);
 
   const fetch = async () => {
     await getDocs(collection(db, "produse"))

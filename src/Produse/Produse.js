@@ -5,12 +5,16 @@ import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReactToPrint from 'react-to-print';
 import PrintIcon from '@mui/icons-material/Print';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const Produse = ({ produse }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedLabels, setSelectedLabels] = useState([]);
     const [selectedEmptyLabels, setSelectedEmptyLabels] = useState([]);
+    const [sortOrder, setSortOrder] = useState('ascending');
     const componentRef = useRef(); // Ref for the component to be printed
+    const [bool, setBool] = useState(false)
 
     useEffect(() => {
         const emptyLabelsCount = 48 - selectedLabels.length; // 12 rows x 4 labels
@@ -34,7 +38,17 @@ const Produse = ({ produse }) => {
         setSelectedLabels(updatedLabels);
     };
 
-    const filteredProduse = produse
+    const handleSort = (order) => {
+        setSortOrder(order);
+    };
+
+    const sortedProduse = [...produse].sort((a, b) => {
+        const dateA = new Date(a.Created).getTime();
+        const dateB = new Date(b.Created).getTime();
+        return sortOrder === 'ascending' ? dateA - dateB : dateB - dateA;
+    });
+
+    const filteredProduse = sortedProduse
         ?.filter(produs =>
             produs.Denumire.toLowerCase().includes(searchQuery.toLowerCase())
         );
@@ -42,6 +56,17 @@ const Produse = ({ produse }) => {
     return (
         <div className='margin'>
             <div className='sort'>
+                <div>
+                    {bool ? <ArrowUpwardIcon sx={{ color: "#000080" }} fontSize='large' className='date-sort' onClick={() => {
+                        handleSort('ascending')
+                        setBool(!bool)
+                    }} />
+                        :
+                        <ArrowDownwardIcon sx={{ color: "#000080" }} fontSize='large' className='date-sort' onClick={() => {
+                            handleSort('descending')
+                            setBool(!bool)
+                        }} />}
+                </div>
                 <input
                     type="text"
                     placeholder="Cautati dupa Denumire..."
@@ -49,6 +74,7 @@ const Produse = ({ produse }) => {
                     onChange={handleSearchChange}
                     className='input' />
                 <SearchIcon fontSize='large' sx={{ color: "#000080" }} />
+
             </div>
             <div className='produse-show'>
                 <div className='prod-list'>
@@ -71,7 +97,7 @@ const Produse = ({ produse }) => {
                 <div>
                     {filteredProduse && <div className="selected-labels">
                         <ReactToPrint
-                            trigger={() => <PrintIcon className='print-btn'/>}
+                            trigger={() => <PrintIcon className='print-btn' />}
                             content={() => componentRef.current}
                         />
                         <div className="label-container" ref={componentRef}>

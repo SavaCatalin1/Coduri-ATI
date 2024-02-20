@@ -1,5 +1,9 @@
 @import url('https://fonts.cdnfonts.com/css/idautomationhc39m');
 
+.date-sort:hover {
+    color: black;
+    cursor: pointer;
+}
 
 .date {
     margin-top: .2rem;
@@ -122,6 +126,10 @@
     align-items: center;
     justify-content: center;
     font-size: 2rem;
+}
+
+.add-label:hover {
+    background-color: #000080c2;
 }
 
 .delete-label {

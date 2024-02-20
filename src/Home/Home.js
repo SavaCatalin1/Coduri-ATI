@@ -17,7 +17,7 @@ const Home = ({ existingCodes, fetch }) => {
                 setGeneratedCode(uniqueCode);
                 try {
                     const timestamp = Date.now();
-                    await addDoc(collection(db, "produse"), { Denumire: name, Cod: uniqueCode, created: timestamp }).then(() => fetch())
+                    await addDoc(collection(db, "produse"), { Denumire: name, Cod: uniqueCode, Created: timestamp }).then(() => fetch())
                 } catch (e) {
                     console.error("Error adding document: ", e);
                 }
