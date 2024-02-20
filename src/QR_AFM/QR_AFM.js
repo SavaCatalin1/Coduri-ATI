@@ -174,7 +174,7 @@ const QRCodeForm = () => {
                     ))}
 
                     <div type="button" onClick={handleAddSerieIdentificarePanou} className='button-form'>Panou +</div>
-
+ 
                     {formData.serieIdentificarePanou.map((serie, index) => (
                         <div key={index} className='panou-item'>
                             <label className='form-label'>Serie de identificare panou fotovoltaic {index + 1}</label>

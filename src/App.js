@@ -11,7 +11,7 @@ import QR_AFM from "./QR_AFM/QR_AFM";
 
 function App() {
   const [existingCodes, setExistingCodes] = useState(null);
-  const [produse, setProduse] = useState(null);
+  const [produse, setProduse] = useState([]);
 
   const fetch = async () => {
     await getDocs(collection(db, "produse"))

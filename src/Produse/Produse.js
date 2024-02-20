@@ -8,6 +8,8 @@ import PrintIcon from '@mui/icons-material/Print';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import AddIcon from '@mui/icons-material/Add';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 const ITEMS_PER_PAGE = 48; // Number of labels per page
 
@@ -63,11 +65,13 @@ const Produse = ({ produse }) => {
     };
 
     const handleNextPage = () => {
-        setCurrentPage(currentPage + 1);
+        if (endIndex < produse.length)
+            setCurrentPage(currentPage + 1);
     };
 
     const handlePrevPage = () => {
-        setCurrentPage(currentPage - 1);
+        if (currentPage != 1)
+            setCurrentPage(currentPage - 1);
     };
 
     const handleSelectAll = () => {
@@ -80,8 +84,8 @@ const Produse = ({ produse }) => {
     };
 
     const sortedProduse = [...produse].sort((a, b) => {
-        const dateA = new Date(a.Created).getTime();
-        const dateB = new Date(b.Created).getTime();
+        const dateA = new Date(Number(a.Created)).getTime();
+        const dateB = new Date(Number(b.Created)).getTime();
         return sortOrder === 'ascending' ? dateA - dateB : dateB - dateA;
     });
 
@@ -97,35 +101,44 @@ const Produse = ({ produse }) => {
         <div className='margin'>
             <div className='sort'>
                 <div className='filters'>
-                    <div className='bulk-mode-toggle'>
-                        <div onClick={handleToggleBulkMode} className='bulk-toggle'>Bulk</div>
-                        {bulkMode && (
-                            <div onClick={handleSelectAll} className='select-all'>All</div>
-                        )}
-                    </div>
-                    <div className='flex-arrow'>
-                        {bool ? <ArrowUpwardIcon sx={{ color: "#000080" }} fontSize='large' className='date-sort' onClick={() => {
-                            handleSort('ascending')
-                            setBool(!bool)
-                        }} />
-                            :
-                            <ArrowDownwardIcon sx={{ color: "#000080" }} fontSize='large' className='date-sort' onClick={() => {
-                                handleSort('descending')
+                    <div className='left-filters'>
+                        <div className='bulk-mode-toggle'>
+                            <div onClick={handleToggleBulkMode} className='bulk-toggle'>Bulk</div>
+                            {bulkMode && (
+                                <div onClick={handleSelectAll} className='select-all'>All</div>
+                            )}
+                        </div>
+                        <div className='flex-arrow'>
+                            {bool ? <ArrowUpwardIcon sx={{ color: "#000080" }} fontSize='large' className='date-sort' onClick={() => {
+                                handleSort('ascending')
                                 setBool(!bool)
-                            }} />}
-                        <b>Data</b>
+                            }} />
+                                :
+                                <ArrowDownwardIcon sx={{ color: "#000080" }} fontSize='large' className='date-sort' onClick={() => {
+                                    handleSort('descending')
+                                    setBool(!bool)
+                                }} />}
+                            <b>Data</b>
+                        </div>
                     </div>
+                    <div className='search-bar'>
+                        <input
+                            type="text"
+                            placeholder="Cautati dupa Denumire..."
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            className='input' />
+                        <SearchIcon fontSize='large' sx={{ color: "#000080" }} />
+                    </div>
+                    {produse.length > ITEMS_PER_PAGE && (
+                        <div className="pagination">
+                            <div onClick={handlePrevPage} className={currentPage === 1 ? 'arrow-disabled' : 'page-arrow'}><ArrowLeftIcon fontSize='large' /></div>
+                            <div onClick={handleNextPage} disabled={endIndex >= produse.length} className={endIndex >= produse.length ? 'arrow-disabled' : 'page-arrow'}><ArrowRightIcon fontSize='large' /></div>
+                        </div>
+                    )}
                 </div>
-                <div className='search-bar'>
-                    <input
-                        type="text"
-                        placeholder="Cautati dupa Denumire..."
-                        value={searchQuery}
-                        onChange={handleSearchChange}
-                        className='input' />
-                    <SearchIcon fontSize='large' sx={{ color: "#000080" }} />
+                <div>
                 </div>
-                <div></div>
 
             </div>
             <div className='produse-show'>
@@ -135,7 +148,7 @@ const Produse = ({ produse }) => {
                             <div>
                                 <div><b>Denumire:</b> {produs.Denumire}</div>
                                 <div><b>Cod:</b> {produs.Cod}</div>
-                                <div className='created'>{new Date(produs.Created).toLocaleString()}</div>
+                                <div className='created'>{new Date(Number(produs.Created)).toLocaleString()}</div>
                             </div>
                             <div>
                                 {bulkMode ? (
@@ -161,12 +174,7 @@ const Produse = ({ produse }) => {
                                 trigger={() => <PrintIcon className='print-btn' />}
                                 content={() => componentRef.current}
                             />
-                            {selectedLabels.length > ITEMS_PER_PAGE && (
-                                <div className="pagination">
-                                    <button onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
-                                    <button onClick={handleNextPage} disabled={endIndex >= selectedLabels.length}>Next</button>
-                                </div>
-                            )}
+
                             <div onClick={() => handleAddSkipLabel()} className='add-blank'><AddIcon /> Blank</div>
                         </div>
                         <div className="label-container" ref={componentRef}>
@@ -175,14 +183,13 @@ const Produse = ({ produse }) => {
                                 <div key={index} className="label">
                                     <div className="label-content">
                                         <span className='barcode'>({label.Cod})</span>
-                                        {/* <Barcode value={label.Cod} width={4} height={100} margin={0} textMargin={0}/> */}
                                         <span className='label-title'>{label.Denumire}</span>
                                     </div>
                                     <div onClick={() => handleRemoveFromLabels(label.id)} className='delete-label'><DeleteIcon /></div>
                                 </div>
                             ))}
                             {/* Render empty labels to fill the page */}
-                            {selectedEmptyLabels.slice(startIndex, endIndex).map((label, index) => (
+                            {selectedEmptyLabels.map((label, index) => (
                                 <div key={label.id} className="label" >
                                     <div className="label-content">
                                         <span></span>

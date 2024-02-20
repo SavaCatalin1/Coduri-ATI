@@ -4,7 +4,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 10%;
+    width: 40%;
+}
+
+.left-filters {
+    display: flex;
 }
 
 .date-sort:hover {
@@ -25,6 +29,19 @@
     width: 100%;
 }
 
+.pagination {
+    display: flex;
+}
+
+.page-arrow:hover {
+    cursor: pointer;
+    color: #000080;
+}
+
+.arrow-disabled {
+    color: gray;
+}
+
 .flex-arrow {
     display: flex;
     align-items: center;
@@ -33,7 +50,7 @@
 .search-bar {
     display: flex;
     align-items: center;
-    width: 30%;
+    width: 50%;
 }
 
 .input {
@@ -146,7 +163,7 @@
 }
 
 .selected-labels {
-    margin-top: 20px;
+    margin-top: -2rem;
 }
 
 .label-container {
