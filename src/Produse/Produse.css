@@ -58,6 +58,10 @@
     font-weight: 600;
 }
 
+.bulk-toggle:hover {
+    background-color: #000080c2;
+}
+
 .select-all {
     cursor: pointer;
     font-size: 1.2rem;
@@ -68,6 +72,10 @@
     border: 1px solid #000080;
     font-weight: 600;
     margin-left: .4rem;
+}
+
+.select-all:hover {
+    background-color: #ececec;
 }
 
 .item {
