@@ -174,7 +174,7 @@ const QRCodeForm = () => {
                     ))}
 
                     <div type="button" onClick={handleAddSerieIdentificarePanou} className='button-form'>Panou +</div>
- 
+
                     {formData.serieIdentificarePanou.map((serie, index) => (
                         <div key={index} className='panou-item'>
                             <label className='form-label'>Serie de identificare panou fotovoltaic {index + 1}</label>
@@ -193,8 +193,8 @@ const QRCodeForm = () => {
                 generateQRCodeText()
                 setIsGenerateClicked(true)
             }} className='button-form'>Genereaza QR</div>
-            {isGenerateClicked && <div ref={qrCodeRef} className="qr-code-container">
-                <QRCode value={generateQRCodeText()} />
+            {isGenerateClicked && <div className="qr-code-container">
+                <div ref={qrCodeRef}><QRCode value={generateQRCodeText()} /></div>
                 <div onClick={downloadQRCode} className='download-qr'>Download QR Code</div>
             </div>}
         </div>
