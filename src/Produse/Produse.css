@@ -33,6 +33,7 @@
 .search-bar {
     display: flex;
     align-items: center;
+    width: 30%;
 }
 
 .input {
@@ -110,12 +111,30 @@
     font-size: 1rem;
 }
 
+.options-page {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .print-btn {
     cursor: pointer;
 }
 
 .print-btn:hover {
     color: gray;
+}
+
+.add-blank {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.add-blank:hover {
+    color: #000080;
 }
 
 .selected-labels {

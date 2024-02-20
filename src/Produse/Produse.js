@@ -7,6 +7,7 @@ import ReactToPrint from 'react-to-print';
 import PrintIcon from '@mui/icons-material/Print';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import AddIcon from '@mui/icons-material/Add';
 
 const ITEMS_PER_PAGE = 48; // Number of labels per page
 
@@ -51,6 +52,11 @@ const Produse = ({ produse }) => {
         const updatedLabels = selectedLabels.filter(label => label.id !== id);
         setSelectedLabels(updatedLabels);
     };
+    const handleAddSkipLabel = (id) => {
+        setSelectedLabels([...selectedLabels, {
+            id: `empty_${id}`
+        }]);
+    }
 
     const handleSort = (order) => {
         setSortOrder(order);
@@ -98,16 +104,16 @@ const Produse = ({ produse }) => {
                         )}
                     </div>
                     <div className='flex-arrow'>
-                    {bool ? <ArrowUpwardIcon sx={{ color: "#000080" }} fontSize='large' className='date-sort' onClick={() => {
-                        handleSort('ascending')
-                        setBool(!bool)
-                    }} />
-                        :
-                        <ArrowDownwardIcon sx={{ color: "#000080" }} fontSize='large' className='date-sort' onClick={() => {
-                            handleSort('descending')
+                        {bool ? <ArrowUpwardIcon sx={{ color: "#000080" }} fontSize='large' className='date-sort' onClick={() => {
+                            handleSort('ascending')
                             setBool(!bool)
-                        }} />}
-                    <b>Data</b>
+                        }} />
+                            :
+                            <ArrowDownwardIcon sx={{ color: "#000080" }} fontSize='large' className='date-sort' onClick={() => {
+                                handleSort('descending')
+                                setBool(!bool)
+                            }} />}
+                        <b>Data</b>
                     </div>
                 </div>
                 <div className='search-bar'>
@@ -150,10 +156,19 @@ const Produse = ({ produse }) => {
                 {!filteredProduse && <ClockLoader color="#000080" className='margin-loading' />}
                 <div>
                     {filteredProduse && <div className="selected-labels">
-                        <ReactToPrint
-                            trigger={() => <PrintIcon className='print-btn' />}
-                            content={() => componentRef.current}
-                        />
+                        <div className='options-page'>
+                            <ReactToPrint
+                                trigger={() => <PrintIcon className='print-btn' />}
+                                content={() => componentRef.current}
+                            />
+                            {selectedLabels.length > ITEMS_PER_PAGE && (
+                                <div className="pagination">
+                                    <button onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
+                                    <button onClick={handleNextPage} disabled={endIndex >= selectedLabels.length}>Next</button>
+                                </div>
+                            )}
+                            <div onClick={() => handleAddSkipLabel()} className='add-blank'><AddIcon /> Blank</div>
+                        </div>
                         <div className="label-container" ref={componentRef}>
                             {/* Render selected labels */}
                             {selectedLabels.map((label, index) => (
@@ -176,12 +191,7 @@ const Produse = ({ produse }) => {
                                 </div>
                             ))}
                         </div>
-                        {selectedLabels.length > ITEMS_PER_PAGE && (
-                            <div className="pagination">
-                                <button onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
-                                <button onClick={handleNextPage} disabled={endIndex >= selectedLabels.length}>Next</button>
-                            </div>
-                        )}
+
                     </div>}
                 </div>
             </div>
