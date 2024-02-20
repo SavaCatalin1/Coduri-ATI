@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './QR_AFM.css'
+import QRCode from 'qrcode.react';
+import html2canvas from 'html2canvas';
 
 const QRCodeForm = () => {
+    const qrCodeRef = useRef(null);
+    const [isGenerateClicked, setIsGenerateClicked] = useState(false);
+
     const [formData, setFormData] = useState({
         tipSolicitant: '',
         numarFactura: '',
@@ -79,8 +84,9 @@ const QRCodeForm = () => {
         } = formData;
 
         const updatedNumePrenume = numePrenume.replace(/\s/g, '-');
+        const updatedPutereInstalata = putereInstalata.replace('.', ',');
 
-        let qrCodeText = `${tipSolicitant}|${numarFactura}|${dataFactura?.toLocaleDateString('en-GB')}|${judet}|${comunaOras}|${sectorSat}|${numeStrada}|${nrStrada}|${updatedNumePrenume}|${cnpCif}|${putereInstalata}`;
+        let qrCodeText = `${tipSolicitant}|${numarFactura}|${dataFactura?.toLocaleDateString('en-GB')}|${judet}|${comunaOras}|${sectorSat}|${numeStrada}|${nrStrada}|${updatedNumePrenume}|${cnpCif}|${updatedPutereInstalata}`;
 
         serieIdentificareInvertor.forEach((serie, index) => {
             qrCodeText += `|${serieIdentificareInvertor[index]}`;
@@ -93,6 +99,15 @@ const QRCodeForm = () => {
         });
 
         return qrCodeText;
+    };
+
+    const downloadQRCode = () => {
+        html2canvas(qrCodeRef.current).then((canvas) => {
+            const link = document.createElement('a');
+            link.download = 'QRCode.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
     };
 
     return (
@@ -116,6 +131,18 @@ const QRCodeForm = () => {
                         dateFormat="dd/MM/yyyy"
                     />
 
+                    <label className='form-label'>{formData.tipSolicitant === '1' ? 'Nume + Prenume' : 'Denumire unitate'}</label>
+                    <input type="text" name="numePrenume" onChange={handleChange} value={formData.numePrenume} />
+
+                    <label className='form-label'>{formData.tipSolicitant === '1' ? 'CNP' : 'CIF'}</label>
+                    <input type="text" name="cnpCif" onChange={handleChange} value={formData.cnpCif} />
+
+                    <label className='form-label'>Putere instalata</label>
+                    <input type="text" name="putereInstalata" onChange={handleChange} value={formData.putereInstalata} />
+
+
+                </div>
+                <div className='form-part2'>
                     <label className='form-label'>Judet</label>
                     <input type="text" name="judet" onChange={handleChange} value={formData.judet} />
 
@@ -128,19 +155,11 @@ const QRCodeForm = () => {
                     <label className='form-label'>Nume strada</label>
                     <input type="text" name="numeStrada" onChange={handleChange} value={formData.numeStrada} />
 
-                    <label className='form-label'>Numar strada</label>
+                    <label className='form-label'>Nr. strada</label>
                     <input type="text" name="nrStrada" onChange={handleChange} value={formData.nrStrada} />
 
-                    <label className='form-label'>{formData.tipSolicitant === '1' ? 'Nume + Prenume' : 'Denumire unitate'}</label>
-                    <input type="text" name="numePrenume" onChange={handleChange} value={formData.numePrenume} />
-
-                    <label className='form-label'>{formData.tipSolicitant === '1' ? 'CNP' : 'CIF'}</label>
-                    <input type="text" name="cnpCif" onChange={handleChange} value={formData.cnpCif} />
-
-                    <label className='form-label'>Putere instalata</label>
-                    <input type="text" name="putereInstalata" onChange={handleChange} value={formData.putereInstalata} />
                 </div>
-                <div>
+                <div className='form-part3'>
                     <div type="button" onClick={handleAddSerieIdentificareInvertor} className='button-form'>Invertor +</div>
 
                     {formData.serieIdentificareInvertor.map((serie, index) => (
@@ -170,8 +189,14 @@ const QRCodeForm = () => {
                 </div>
 
             </form>
-            <div onClick={() => alert(generateQRCodeText())} className='button-form'>Genereaza QR</div>
-
+            <div onClick={() => {
+                generateQRCodeText()
+                setIsGenerateClicked(true)
+            }} className='button-form'>Genereaza QR</div>
+            {isGenerateClicked && <div ref={qrCodeRef} className="qr-code-container">
+                <QRCode value={generateQRCodeText()} />
+                <div onClick={downloadQRCode} className='download-qr'>Download QR Code</div>
+            </div>}
         </div>
     );
 };
