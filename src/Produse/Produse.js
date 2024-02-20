@@ -8,16 +8,21 @@ import PrintIcon from '@mui/icons-material/Print';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
+const ITEMS_PER_PAGE = 48; // Number of labels per page
+
 const Produse = ({ produse }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedLabels, setSelectedLabels] = useState([]);
     const [selectedEmptyLabels, setSelectedEmptyLabels] = useState([]);
     const [sortOrder, setSortOrder] = useState('ascending');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [selectAll, setSelectAll] = useState(false);
+    const [bulkMode, setBulkMode] = useState(false); // Flag to activate bulk functionality
     const componentRef = useRef(); // Ref for the component to be printed
     const [bool, setBool] = useState(false)
 
     useEffect(() => {
-        const emptyLabelsCount = 48 - selectedLabels.length; // 12 rows x 4 labels
+        const emptyLabelsCount = ITEMS_PER_PAGE - (selectedLabels.length % ITEMS_PER_PAGE);
         const emptyLabels = Array.from({ length: emptyLabelsCount }).map((_, index) => ({
             id: `empty_${index}`
         }));
@@ -29,17 +34,43 @@ const Produse = ({ produse }) => {
     };
 
     const handleAddToLabels = (produs) => {
-        setSelectedLabels([...selectedLabels, produs]);
+        if (bulkMode) {
+            const isSelected = selectedLabels.some(label => label.id === produs.id);
+            if (isSelected) {
+                const updatedLabels = selectedLabels.filter(label => label.id !== produs.id);
+                setSelectedLabels(updatedLabels);
+            } else {
+                setSelectedLabels([...selectedLabels, produs]);
+            }
+        } else {
+            setSelectedLabels([...selectedLabels, produs]);
+        }
     };
 
-    const handleRemoveFromLabels = (index) => {
-        const updatedLabels = [...selectedLabels];
-        updatedLabels.splice(index, 1);
+    const handleRemoveFromLabels = (id) => {
+        const updatedLabels = selectedLabels.filter(label => label.id !== id);
         setSelectedLabels(updatedLabels);
     };
 
     const handleSort = (order) => {
         setSortOrder(order);
+    };
+
+    const handleNextPage = () => {
+        setCurrentPage(currentPage + 1);
+    };
+
+    const handlePrevPage = () => {
+        setCurrentPage(currentPage - 1);
+    };
+
+    const handleSelectAll = () => {
+        setSelectAll(!selectAll);
+        setSelectedLabels(selectAll ? [] : filteredProduse);
+    };
+
+    const handleToggleBulkMode = () => {
+        setBulkMode(!bulkMode);
     };
 
     const sortedProduse = [...produse].sort((a, b) => {
@@ -53,10 +84,20 @@ const Produse = ({ produse }) => {
             produs.Denumire.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+
     return (
         <div className='margin'>
             <div className='sort'>
-                <div>
+                <div className='filters'>
+                    <div className='bulk-mode-toggle'>
+                        <div onClick={handleToggleBulkMode} className='bulk-toggle'>Bulk</div>
+                        {bulkMode && (
+                            <div onClick={handleSelectAll} className='select-all'>All</div>
+                        )}
+                    </div>
+                    <div className='flex-arrow'>
                     {bool ? <ArrowUpwardIcon sx={{ color: "#000080" }} fontSize='large' className='date-sort' onClick={() => {
                         handleSort('ascending')
                         setBool(!bool)
@@ -66,29 +107,42 @@ const Produse = ({ produse }) => {
                             handleSort('descending')
                             setBool(!bool)
                         }} />}
+                    <b>Data</b>
+                    </div>
                 </div>
-                <input
-                    type="text"
-                    placeholder="Cautati dupa Denumire..."
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    className='input' />
-                <SearchIcon fontSize='large' sx={{ color: "#000080" }} />
+                <div className='search-bar'>
+                    <input
+                        type="text"
+                        placeholder="Cautati dupa Denumire..."
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        className='input' />
+                    <SearchIcon fontSize='large' sx={{ color: "#000080" }} />
+                </div>
+                <div></div>
 
             </div>
             <div className='produse-show'>
                 <div className='prod-list'>
-                    {filteredProduse && filteredProduse.map((produs, index) => (
+                    {filteredProduse && filteredProduse.slice(startIndex, endIndex).map((produs, index) => (
                         <div className='item' key={index}>
                             <div>
                                 <div><b>Denumire:</b> {produs.Denumire}</div>
                                 <div><b>Cod:</b> {produs.Cod}</div>
-                                <div className='created'>{produs.created}</div>
+                                <div className='created'>{new Date(produs.Created).toLocaleString()}</div>
                             </div>
                             <div>
-                                <button onClick={() => handleAddToLabels(produs)} className='add-label'>
-                                    +
-                                </button>
+                                {bulkMode ? (
+                                    <input
+                                        type="checkbox"
+                                        onChange={() => handleAddToLabels(produs)}
+                                        checked={selectedLabels.some(label => label.id === produs.id)}
+                                    />
+                                ) : (
+                                    <button onClick={() => handleAddToLabels(produs)} className='add-label'>
+                                        +
+                                    </button>
+                                )}
                             </div>
                         </div>
                     ))}
@@ -109,11 +163,11 @@ const Produse = ({ produse }) => {
                                         {/* <Barcode value={label.Cod} width={4} height={100} margin={0} textMargin={0}/> */}
                                         <span className='label-title'>{label.Denumire}</span>
                                     </div>
-                                    <div onClick={() => handleRemoveFromLabels(index)} className='delete-label'><DeleteIcon /></div>
+                                    <div onClick={() => handleRemoveFromLabels(label.id)} className='delete-label'><DeleteIcon /></div>
                                 </div>
                             ))}
                             {/* Render empty labels to fill the page */}
-                            {selectedEmptyLabels?.map((label, index) => (
+                            {selectedEmptyLabels.slice(startIndex, endIndex).map((label, index) => (
                                 <div key={label.id} className="label" >
                                     <div className="label-content">
                                         <span></span>
@@ -122,9 +176,16 @@ const Produse = ({ produse }) => {
                                 </div>
                             ))}
                         </div>
+                        {selectedLabels.length > ITEMS_PER_PAGE && (
+                            <div className="pagination">
+                                <button onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
+                                <button onClick={handleNextPage} disabled={endIndex >= selectedLabels.length}>Next</button>
+                            </div>
+                        )}
                     </div>}
                 </div>
             </div>
+
         </div>
     );
 };
