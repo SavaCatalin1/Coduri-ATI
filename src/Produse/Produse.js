@@ -172,6 +172,12 @@ const Produse = ({ produse }) => {
                             </div>
                         </div>
                     ))}
+                    {produse.length > ITEMS_PER_PAGE && (
+                        <div className="pagination-1">
+                            <div onClick={handlePrevPage} className={currentPage === 1 ? 'arrow-disabled' : 'page-arrow'}><ArrowLeftIcon fontSize='large' /></div>
+                            <div onClick={handleNextPage} disabled={endIndex >= produse.length} className={endIndex >= produse.length ? 'arrow-disabled' : 'page-arrow'}><ArrowRightIcon fontSize='large' /></div>
+                        </div>
+                    )}
                 </div>
                 {!filteredProduse && <ClockLoader color="#000080" className='margin-loading' />}
                 <div>
