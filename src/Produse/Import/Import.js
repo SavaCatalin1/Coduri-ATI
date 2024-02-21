@@ -22,7 +22,7 @@ const UploadCSVToFirestore = () => {
       const text = e.target.result;
       const rows = text.split('\n').map(row => row.split(','));
 
-      // Assuming the headers are "Denumire", "Cod", and "Created"
+      // Assuming the headers are "Denumire", "Cod", "Created", and "Pret"
       const headers = rows[0];
 
       // Remove the first row (headers) from the data
@@ -34,13 +34,14 @@ const UploadCSVToFirestore = () => {
         obj[headers[0]] = row[0]; // Assuming the first column is "Denumire"
         obj[headers[1]] = row[1] ? row[1].replace(/\s+$/, '') : ''; // Trim trailing whitespace from "Cod"
         obj[headers[2]] = row[2] ? row[2].replace(/\s+$/, '') : ''; // "Created" column
+        obj[headers[3]] = row[3] ? row[3].replace(/\s+$/, '') : ''; // "Pret" column
         return obj;
       });
 
       // Upload data to Firestore
       try {
         for (const doc of data) {
-          await addDoc(collection(db, "produse"), doc); // Adding Created timestamp
+          await addDoc(collection(db, "produse"), { ...doc, Created: Date.now() }); // Adding Created timestamp
         }
         console.log('Data uploaded successfully!');
       } catch (error) {

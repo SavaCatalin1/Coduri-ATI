@@ -187,7 +187,6 @@ const QRCodeForm = () => {
                     ))}
 
                 </div>
-
             </form>
             <div onClick={() => {
                 generateQRCodeText()

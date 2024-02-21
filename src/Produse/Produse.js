@@ -10,6 +10,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+// import Import from "./Import/Import"
 
 const ITEMS_PER_PAGE = 48; // Number of labels per page
 
@@ -99,6 +100,7 @@ const Produse = ({ produse }) => {
 
     return (
         <div className='margin'>
+            {/* <Import/> */}
             <div className='sort'>
                 <div className='filters'>
                     <div className='left-filters'>
@@ -146,8 +148,9 @@ const Produse = ({ produse }) => {
                     {filteredProduse && filteredProduse.slice(startIndex, endIndex).map((produs, index) => (
                         <div className='item' key={index}>
                             <div>
-                                <div><b>Denumire:</b> {produs.Denumire}</div>
-                                <div><b>Cod:</b> {produs.Cod}</div>
+                                <div><b>Denumire: </b> {produs.Denumire}</div>
+                                <div><b>Cod: </b> {produs.Cod}</div>
+                                <div><b>Pret vanzare: </b>{produs.Pret}</div>
                                 <div className='created'>{new Date(Number(produs.Created)).toLocaleString()}</div>
                             </div>
                             <div>

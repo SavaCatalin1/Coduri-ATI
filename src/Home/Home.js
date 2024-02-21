@@ -8,6 +8,8 @@ const Home = ({ existingCodes, fetch }) => {
     const [category, setCategory] = useState("101");
     const [generatedCode, setGeneratedCode] = useState('');
     const [name, setName] = useState(null);
+    const [pretAchizitie, setPretAchizitie] = useState(null);
+    const [pretVanzare, setPretVanzare] = useState(null);
 
     const generateUniqueCode = async () => {
         const randomDigits = Math.floor(Math.random() * 10000000); // Generate 7 random digits
@@ -17,7 +19,8 @@ const Home = ({ existingCodes, fetch }) => {
                 setGeneratedCode(uniqueCode);
                 try {
                     const timestamp = Date.now();
-                    await addDoc(collection(db, "produse"), { Denumire: name, Cod: uniqueCode, Created: timestamp }).then(() => fetch())
+                    setPretVanzare(Number(pretAchizitie) + (Number(pretAchizitie) * 20 / 100));
+                    await addDoc(collection(db, "produse"), { Denumire: name, Cod: uniqueCode, Created: timestamp, Pret: pretVanzare }).then(() => fetch())
                 } catch (e) {
                     console.error("Error adding document: ", e);
                 }
@@ -53,6 +56,10 @@ const Home = ({ existingCodes, fetch }) => {
                 <input onChange={(e) => setName(e.target.value)} className='width'></input>
             </div>
             <div>
+                <div className='group noselect'>Pret achizitie</div>
+                <input onChange={(e) => setPretAchizitie(e.target.value)} className='width'></input>
+            </div>
+            <div>
                 <div className='group noselect'>Categorie</div>
                 <select value={category} onChange={handleCategoryChange} className='categorie-select noselect width'>
                     <option value={"101"}>Panouri Fotovoltaice</option>
@@ -83,11 +90,18 @@ const Home = ({ existingCodes, fetch }) => {
                     <option value={"127"}>Alte Materiale</option>
                     <option value={"200"}>Scule</option>
                 </select>
+
+
             </div>
             <button onClick={handleGenerateCode} className='noselect button'>Genereaza Cod</button>
             {generatedCode && (
                 <div className='generated-flex'>
                     <span className='noselect'>Codul Generat:</span> <b>{generatedCode}</b>
+                </div>
+            )}
+            {pretVanzare && (
+                <div className='generated-flex'>
+                    <span className='noselect'>Pretul de vanzare:</span> <b>{pretVanzare}</b>
                 </div>
             )}
         </div>
