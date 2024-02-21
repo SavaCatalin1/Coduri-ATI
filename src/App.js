@@ -19,7 +19,6 @@ function App() {
       const newData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setExistingCodes(newData.map(coduri => coduri.Cod));
       setProduse(newData);
-      console.log(newData);
     } catch (error) {
       console.error('Error fetching data:', error);
     }

@@ -33,7 +33,6 @@ const Produse = ({ produse }) => {
             id: `empty_${index}`
         }));
         setSelectedEmptyLabels(emptyLabels);
-        console.log(emptyLabelsCount)
     }, [selectedLabels, ITEMS_PER_PAGE]); // Re-calculate empty labels when selectedLabels change
 
     const handleSearchChange = (e) => {
@@ -101,7 +100,6 @@ const Produse = ({ produse }) => {
 
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
-    console.log(startIndex)
 
     return (
         <div className='margin'>
