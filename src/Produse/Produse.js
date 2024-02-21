@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useId } from 'react';
 import './Produse.css';
 import { ClockLoader } from "react-spinners"
 import SearchIcon from '@mui/icons-material/Search';
@@ -10,9 +10,8 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import { v1 as uuidv1 } from 'uuid';
 // import Import from "./Import/Import"
-
-const ITEMS_PER_PAGE = 48; // Number of labels per page
 
 const Produse = ({ produse }) => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -24,6 +23,9 @@ const Produse = ({ produse }) => {
     const [bulkMode, setBulkMode] = useState(false); // Flag to activate bulk functionality
     const componentRef = useRef(); // Ref for the component to be printed
     const [bool, setBool] = useState(false)
+    const [twoColumnLayout, setTwoColumnLayout] = useState(false);
+    const [ITEMS_PER_PAGE, setITEMS_PER_PAGE] = useState(48);
+
 
     useEffect(() => {
         const emptyLabelsCount = ITEMS_PER_PAGE - (selectedLabels.length % ITEMS_PER_PAGE);
@@ -31,7 +33,8 @@ const Produse = ({ produse }) => {
             id: `empty_${index}`
         }));
         setSelectedEmptyLabels(emptyLabels);
-    }, [selectedLabels]); // Re-calculate empty labels when selectedLabels change
+        console.log(emptyLabelsCount)
+    }, [selectedLabels, ITEMS_PER_PAGE]); // Re-calculate empty labels when selectedLabels change
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
@@ -55,7 +58,8 @@ const Produse = ({ produse }) => {
         const updatedLabels = selectedLabels.filter(label => label.id !== id);
         setSelectedLabels(updatedLabels);
     };
-    const handleAddSkipLabel = (id) => {
+    const handleAddSkipLabel = () => {
+        const id = uuidv1();
         setSelectedLabels([...selectedLabels, {
             id: `empty_${id}`
         }]);
@@ -97,6 +101,7 @@ const Produse = ({ produse }) => {
 
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
+    console.log(startIndex)
 
     return (
         <div className='margin'>
@@ -173,19 +178,29 @@ const Produse = ({ produse }) => {
                 <div>
                     {filteredProduse && <div className="selected-labels">
                         <div className='options-page'>
-                            <ReactToPrint
+                            <div className='print-cont'><ReactToPrint
                                 trigger={() => <PrintIcon className='print-btn' />}
                                 content={() => componentRef.current}
                             />
-
+                            </div>
+                            <div className='page-sizes-container'>
+                                <div className={twoColumnLayout === false ? 'page-size-selected' : 'page-size'} onClick={() => {
+                                    setTwoColumnLayout(false)
+                                    setITEMS_PER_PAGE(48)
+                                }}>20x4</div>
+                                <div className={twoColumnLayout === true ? 'page-size-selected' : 'page-size'} onClick={() => {
+                                    setTwoColumnLayout(true)
+                                    setITEMS_PER_PAGE(10)
+                                }}>5x2</div>
+                            </div>
                             <div onClick={() => handleAddSkipLabel()} className='add-blank'><AddIcon /> Blank</div>
                         </div>
-                        <div className="label-container" ref={componentRef}>
+                        <div className={`label-container ${twoColumnLayout ? 'two-column-layout' : ''}`} ref={componentRef}>
                             {/* Render selected labels */}
                             {selectedLabels.map((label, index) => (
                                 <div key={index} className="label">
                                     <div className="label-content">
-                                        <span className='barcode'>({label.Cod})</span>
+                                        <span className='barcode'>{label.Cod !== "" ? (label.Cod) : ""}</span>
                                         <span className='label-title'>{label.Denumire}</span>
                                     </div>
                                     <div onClick={() => handleRemoveFromLabels(label.id)} className='delete-label'><DeleteIcon /></div>
