@@ -20,7 +20,7 @@ const Home = ({ existingCodes, fetch }) => {
                 try {
                     const timestamp = Date.now();
                     setPretVanzare(Number(pretAchizitie) + (Number(pretAchizitie) * 20 / 100));
-                    await addDoc(collection(db, "produse"), { Denumire: name, Cod: uniqueCode, Created: timestamp, Pret: pretVanzare }).then(() => fetch())
+                    await addDoc(collection(db, "produse"), { Denumire: name, Cod: uniqueCode, Created: timestamp, Pret: Number(pretAchizitie) + (Number(pretAchizitie) * 20 / 100) }).then(() => fetch())
                 } catch (e) {
                     console.error("Error adding document: ", e);
                 }

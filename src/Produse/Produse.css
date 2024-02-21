@@ -203,7 +203,8 @@
 }
 
 .label-title {
-    font-size: .9rem;
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .add-label {

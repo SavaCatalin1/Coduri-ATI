@@ -14,15 +14,16 @@ function App() {
   const [produse, setProduse] = useState([]);
 
   const fetch = async () => {
-    await getDocs(collection(db, "produse"))
-      .then((querySnapshot) => {
-        const newData = querySnapshot.docs
-          .map((doc) => ({ ...doc.data() }));
-        setExistingCodes(newData.map((coduri) => coduri.Cod))
-        setProduse(newData);
-        console.log(newData)
-      })
-  }
+    try {
+      const querySnapshot = await getDocs(collection(db, "produse"));
+      const newData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setExistingCodes(newData.map(coduri => coduri.Cod));
+      setProduse(newData);
+      console.log(newData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   useEffect(() => {
     fetch()
