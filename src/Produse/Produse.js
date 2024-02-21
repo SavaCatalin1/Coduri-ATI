@@ -153,12 +153,13 @@ const Produse = ({ produse }) => {
                             <div>
                                 <div><b>Denumire: </b> {produs.Denumire}</div>
                                 <div><b>Pret vanzare: </b>{produs.Pret}</div>
-                                <div><b>Cod: </b> {produs.Cod}</div>     
+                                <div><b>Cod: </b> {produs.Cod}</div>
                                 <div className='created'>{new Date(Number(produs.Created)).toLocaleString()}</div>
                             </div>
                             <div>
                                 {bulkMode ? (
                                     <input
+                                        className='add-label'
                                         type="checkbox"
                                         onChange={() => handleAddToLabels(produs)}
                                         checked={selectedLabels.some(label => label.id === produs.id)}
