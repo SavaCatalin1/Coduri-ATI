@@ -154,8 +154,8 @@ const Produse = ({ produse }) => {
                         <div className='item' key={index}>
                             <div>
                                 <div><b>Denumire: </b> {produs.Denumire}</div>
-                                <div><b>Cod: </b> {produs.Cod}</div>
                                 <div><b>Pret vanzare: </b>{produs.Pret}</div>
+                                <div><b>Cod: </b> {produs.Cod}</div>     
                                 <div className='created'>{new Date(Number(produs.Created)).toLocaleString()}</div>
                             </div>
                             <div>
