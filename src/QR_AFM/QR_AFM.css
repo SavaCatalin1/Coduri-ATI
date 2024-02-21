@@ -72,8 +72,9 @@ input, select {
     font-size: 1.3rem;
     color: #000080;
     font-weight: 600;
-    text-decoration: underline;
     cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 .download-qr:hover {

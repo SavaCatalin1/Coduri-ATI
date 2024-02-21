@@ -4,6 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './QR_AFM.css'
 import QRCode from 'qrcode.react';
 import html2canvas from 'html2canvas';
+import DownloadIcon from '@mui/icons-material/Download';
 
 const QRCodeForm = () => {
     const qrCodeRef = useRef(null);
@@ -192,10 +193,12 @@ const QRCodeForm = () => {
                 generateQRCodeText()
                 setIsGenerateClicked(true)
             }} className='button-form'>Genereaza QR</div>
-            {isGenerateClicked && <div className="qr-code-container">
-                <div ref={qrCodeRef}><QRCode value={generateQRCodeText()} /></div>
-                <div onClick={downloadQRCode} className='download-qr'>Download QR Code</div>
-            </div>}
+            {isGenerateClicked && <>
+                <div className="qr-code-container">
+                    <div ref={qrCodeRef}><QRCode value={generateQRCodeText()} /></div>
+                </div>
+                <div onClick={downloadQRCode} className='download-qr'><DownloadIcon fontSize='large' />Download</div>
+            </>}
         </div>
     );
 };
