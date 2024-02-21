@@ -98,8 +98,8 @@ const Produse = ({ produse }) => {
             produs.Denumire.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const startIndex = (currentPage - 1) * 10;
+    const endIndex = startIndex + 10;
 
     return (
         <div className='margin'>
