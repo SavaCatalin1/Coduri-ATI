@@ -55,10 +55,10 @@ const Home = ({ existingCodes, fetch }) => {
                 <div className='group noselect'>Denumire produs</div>
                 <input onChange={(e) => setName(e.target.value)} className='width'></input>
             </div>
-            <div>
+            {/* <div>
                 <div className='group noselect'>Pret achizitie</div>
                 <input onChange={(e) => setPretAchizitie(e.target.value)} className='width'></input>
-            </div>
+            </div> */}
             <div>
                 <div className='group noselect'>Categorie</div>
                 <select value={category} onChange={handleCategoryChange} className='categorie-select noselect width'>
@@ -99,11 +99,11 @@ const Home = ({ existingCodes, fetch }) => {
                     <span className='noselect'>Codul Generat:</span> <b>{generatedCode}</b>
                 </div>
             )}
-            {pretVanzare && (
+            {/* {pretVanzare && (
                 <div className='generated-flex'>
                     <span className='noselect'>Pretul de vanzare:</span> <b>{pretVanzare}</b>
                 </div>
-            )}
+            )} */}
         </div>
     )
 }
