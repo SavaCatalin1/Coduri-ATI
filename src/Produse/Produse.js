@@ -144,7 +144,6 @@ const Produse = ({ produse }) => {
                 </div>
                 <div>
                 </div>
-
             </div>
             <div className='produse-show'>
                 <div className='prod-list'>
@@ -221,11 +220,9 @@ const Produse = ({ produse }) => {
                                 </div>
                             ))}
                         </div>
-
                     </div>}
                 </div>
             </div>
-
         </div>
     );
 };
