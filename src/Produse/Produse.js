@@ -10,10 +10,14 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import CheckIcon from '@mui/icons-material/Check';
 import { v1 as uuidv1 } from 'uuid';
+import axios from 'axios';
+import { doc, updateDoc } from '@firebase/firestore';
+import { db } from '../firebase';
 // import Import from "./Import/Import"
 
-const Produse = ({ produse }) => {
+const Produse = ({ produse, fetch }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedLabels, setSelectedLabels] = useState([]);
     const [selectedEmptyLabels, setSelectedEmptyLabels] = useState([]);
@@ -26,6 +30,36 @@ const Produse = ({ produse }) => {
     const [twoColumnLayout, setTwoColumnLayout] = useState(false);
     const [ITEMS_PER_PAGE, setITEMS_PER_PAGE] = useState(48);
 
+    // Define categories and their mappings
+    const categories = {
+        "101": "Panouri Fotovoltaice",
+        "102": "Structura Panouri Fotovoltaice",
+        "103": "Accesorii Structura Panouri",
+        "104": "Invertoare",
+        "105": "Baterii",
+        "106": "Accesorii Panou Comanda",
+        "107": "Tablouri Electrice",
+        "108": "Echipamente si Accesorii Tablouri",
+        "109": "Pat Cablu Metalic",
+        "110": "Accesorii Pat Cablu Metalic",
+        "111": "Pat Cablu Plastic",
+        "112": "Accesorii Pat Cablu Plastic",
+        "113": "Cablu Curent Continuu",
+        "114": "Cablu Curent Alternativ",
+        "115": "Accesorii Cablu",
+        "116": "Tubulatura Protectie Cablu",
+        "117": "Corpuri Iluminat Electric",
+        "118": "Aparataj Electric",
+        "119": "Material Marunt",
+        "121": "Consumabile",
+        "122": "Materiale Echipamente Protectie",
+        "123": "Materiale Auto",
+        "124": "Materiale Constructii",
+        "125": "Materiale Instalatii Sanitare / Gaze",
+        "126": "Materiale Impamantare",
+        "127": "Alte Materiale",
+        "200": "Scule"
+    };
 
     useEffect(() => {
         const emptyLabelsCount = ITEMS_PER_PAGE - (selectedLabels.length % ITEMS_PER_PAGE);
@@ -101,6 +135,25 @@ const Produse = ({ produse }) => {
     const startIndex = (currentPage - 1) * 10;
     const endIndex = startIndex + 10;
 
+
+    const getCategoryFromCode = (code) => {
+        const categoryCode = code.substring(0, 3);
+        return categories[categoryCode] || 'Unknown Category';
+    };
+
+    const sendRating = async (item) => {
+        console.log(item.Cod)
+        let sendData = {
+            'name': item.Denumire,
+            'category': item.Cod.substring(0, 3)
+        }
+        console.log(sendData)
+        axios.post(`http://127.0.0.1:5000/add_data`, sendData)
+        await updateDoc(doc(db, "produse", item.id), {
+            feedback: 1
+        }).then(() => fetch());
+    }
+
     return (
         <div className='margin'>
             {/* <Import/> */}
@@ -149,12 +202,17 @@ const Produse = ({ produse }) => {
                 <div className='prod-list'>
                     {filteredProduse && filteredProduse.slice(startIndex, endIndex).map((produs, index) => (
                         <div className='item' key={index}>
-                            <div>
+                            <div className='details-product'>
                                 <div><b>Denumire: </b> {produs.Denumire}</div>
+                                <div><b>Categorie: </b>{getCategoryFromCode(produs.Cod)}</div> {/* Display category */}
                                 {/* <div><b>Pret vanzare: </b>{produs.Pret}</div> */}
                                 <div><b>Cod: </b> {produs.Cod}</div>
                                 <div className='created'>{new Date(Number(produs.Created)).toLocaleString()}</div>
                             </div>
+                            {produs.Created >= 1708519170856 && produs.feedback !== 1 && <div className='rating-container'>
+                                <span>Categorie corecta?</span>
+                                <div onClick={() => sendRating(produs)}><CheckIcon fontSize='large' className='tick'/></div>
+                            </div>}
                             <div>
                                 {bulkMode ? (
                                     <input

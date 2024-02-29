@@ -52,7 +52,7 @@
 .flex-arrow {
     display: flex;
     align-items: center;
-} 
+}
 
 .search-bar {
     display: flex;
@@ -116,6 +116,10 @@
     color: #000080;
 }
 
+.details-product {
+    width: 65%;
+}
+
 .margin {
     display: flex;
     flex-direction: column;
@@ -147,6 +151,22 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.rating-container {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    width: 15%;
+}
+
+.tick {
+    cursor: pointer;
+}
+
+.tick:hover {
+    color: green;
 }
 
 .print-cont {

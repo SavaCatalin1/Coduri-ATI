@@ -26,6 +26,21 @@
     align-items: center;
 }
 
+.flex-auto{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.auto-ai{
+    height: .1rem;
+    position: absolute;
+    right: -5rem;
+    cursor: pointer;
+    font-size: 1rem;    
+}
+
 .noselect {
     user-select: none;
 }
