@@ -148,7 +148,7 @@ const Produse = ({ produse, fetch }) => {
             'category': item.Cod.substring(0, 3)
         }
         console.log(sendData)
-        axios.post(`http://127.0.0.1:5000/add_data`, sendData)
+        axios.post(`http://ec2-44-220-130-90.compute-1.amazonaws.com/add_data`, sendData)
         await updateDoc(doc(db, "produse", item.id), {
             feedback: 1
         }).then(() => fetch());
