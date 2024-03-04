@@ -266,7 +266,7 @@ const Produse = ({ produse, fetch }) => {
                             {selectedLabels.map((label, index) => (
                                 <div key={index} className="label">
                                     <div className="label-content">
-                                        <span className='barcode'>{label.Cod !== "" ? (label.Cod) : ""}</span>
+                                        <span className='barcode'>{label.Cod !== "" ? (`(${label.Cod})`) : ""}</span>
                                         <span className='label-title'>{label.Denumire}</span>
                                     </div>
                                     <div onClick={() => handleRemoveFromLabels(label.id)} className='delete-label'><DeleteIcon /></div>

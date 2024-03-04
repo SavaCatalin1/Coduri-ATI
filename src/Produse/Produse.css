@@ -385,12 +385,12 @@
     }
 
     .rating-container {
-    margin-top: 8rem;
-    display: flex;
-    align-items: center;
-    font-size: 1rem;
-    font-weight: 600;
-}
+        margin-top: 8rem;
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+        font-weight: 600;
+    }
   }
 
 @media print {
