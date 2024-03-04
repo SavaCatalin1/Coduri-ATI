@@ -344,6 +344,55 @@
     background-color: #ececec;
 }
 
+@media screen and (max-width: 1024px) {
+    .sort{
+        margin-bottom: 3rem;
+        margin-left: 2rem;
+    }
+
+    .filters{
+        width: 100%;
+    }
+
+    .prod-list {
+        min-width: 50%;
+        max-width: 50%;
+        margin-left: 1rem;
+    }
+    
+    .produse-show {
+        width: 40vw;
+        display: flex;
+    }
+
+    .item {
+        margin-top: 1rem;
+        font-size: 1.2rem;
+        width: 20rem;
+        height: 17rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-right: 1rem;
+        background-color: #FAF9F6;
+        padding: 1rem;
+        border-radius: 1rem;
+        color: #000080;
+    }
+    
+    .details-product {
+        width: 65%;
+    }
+
+    .rating-container {
+    margin-top: 8rem;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 600;
+}
+  }
+
 @media print {
     .delete-label {
         display: none;
