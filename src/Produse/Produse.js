@@ -148,7 +148,11 @@ const Produse = ({ produse, fetch }) => {
             'category': item.Cod.substring(0, 3)
         }
         console.log(sendData)
-        axios.post(`https://ec2-44-220-130-90.compute-1.amazonaws.com/add_data`, sendData)
+        axios.post(`https://ec2-44-220-130-90.compute-1.amazonaws.com/add_data`, sendData, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
         await updateDoc(doc(db, "produse", item.id), {
             feedback: 1
         }).then(() => fetch());
@@ -211,7 +215,7 @@ const Produse = ({ produse, fetch }) => {
                             </div>
                             {produs.Created >= 1708519170856 && produs.feedback !== 1 && <div className='rating-container'>
                                 <span>Categorie corecta?</span>
-                                <div onClick={() => sendRating(produs)}><CheckIcon fontSize='large' className='tick'/></div>
+                                <div onClick={() => sendRating(produs)}><CheckIcon fontSize='large' className='tick' /></div>
                             </div>}
                             <div>
                                 {bulkMode ? (

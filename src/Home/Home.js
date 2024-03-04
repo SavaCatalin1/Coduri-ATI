@@ -37,19 +37,28 @@ const Home = ({ existingCodes, fetch }) => {
 
     const handleAICategory = async () => {
         if (name !== null && name !== '') {
-            const uppername = name.toUpperCase()
-            const response = await Axios.post('https://ec2-44-220-130-90.compute-1.amazonaws.com/predict', {
-                product_name: uppername
-            });
-            const data = response.data;
-            console.log(data)
-            setCategory(data.category)
+            const uppername = name.toUpperCase();
+            try {
+                const response = await Axios.post(
+                    'https://ec2-44-220-130-90.compute-1.amazonaws.com/predict',
+                    { product_name: uppername },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    }
+                );
+                const data = response.data;
+                console.log(data);
+                setCategory(data.category);
+            } catch (error) {
+                console.error('Error:', error);
+                // Handle error
+            }
+        } else {
+            alert("Introduceti o denumire completa!");
         }
-        else {
-            alert("Introduceti o denumire completa!")
-        }
-    }
-
+    };
     const handleCategoryChange = (e) => {
         setCategory(e.target.value);
     };
