@@ -38,7 +38,7 @@ const Home = ({ existingCodes, fetch }) => {
     const handleAICategory = async () => {
         if (name !== null && name !== '') {
             const uppername = name.toUpperCase()
-            const response = await Axios.post('http://ec2-44-220-130-90.compute-1.amazonaws.com/predict', {
+            const response = await Axios.post('https://ec2-44-220-130-90.compute-1.amazonaws.com/predict', {
                 product_name: uppername
             });
             const data = response.data;
