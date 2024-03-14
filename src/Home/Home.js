@@ -40,7 +40,7 @@ const Home = ({ existingCodes, fetch }) => {
             const uppername = name.toUpperCase();
             try {
                 const response = await Axios.post(
-                    'https://ec2-44-220-130-90.compute-1.amazonaws.com/predict',
+                    'https://savacatalin.pythonanywhere.com/predict',
                     { product_name: uppername },
                     {
                         headers: {

@@ -148,7 +148,7 @@ const Produse = ({ produse, fetch }) => {
             'category': item.Cod.substring(0, 3)
         }
         console.log(sendData)
-        axios.post(`https://ec2-44-220-130-90.compute-1.amazonaws.com/add_data`, sendData, {
+        axios.post(`https://savacatalin.pythonanywhere.com/add_data`, sendData, {
             headers: {
                 'Content-Type': 'application/json',
             }
