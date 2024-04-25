@@ -1,3 +1,20 @@
+.mode-button {
+    height: 2.5rem;
+    background-color: #000080;
+    color: white;
+    font-size: 1.2rem;
+    padding: .4rem;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 1rem;
+    margin-top: 1rem;
+}
+
+.mode-button:hover {
+    background-color: #01015d;
+}
+
 .form-wrapper {
     display: flex;
     flex-direction: column;
@@ -18,23 +35,25 @@
     flex-direction: column;
     width: 40%;
 }
+
 .form-part2 {
     display: flex;
     flex-direction: column;
     width: 33%;
 }
 
-.form-part3{
+.form-part3 {
     width: 27%;
 }
 
 .form-label {
     font-weight: 600;
     font-size: 1.7rem;
-    
+
 }
 
-input, select {
+input,
+select {
     width: 20rem;
     height: 3rem;
     border: 1px solid #000080;
@@ -79,4 +98,10 @@ input, select {
 
 .download-qr:hover {
     color: #000080c2;
+}
+
+.text-mode-input {
+    width: 50rem;
+    height: 30rem;
+    margin-bottom: 2rem;
 }
