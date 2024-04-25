@@ -105,3 +105,8 @@ select {
     height: 30rem;
     margin-bottom: 2rem;
 }
+
+.qr {
+    width: 20rem;
+    height: 20rem;
+}

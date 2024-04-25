@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './QR_AFM.css'
-import QRCode from 'qrcode.react';
+import QRCodeSVG from 'qrcode.react';
 import html2canvas from 'html2canvas';
 import DownloadIcon from '@mui/icons-material/Download';
 
@@ -110,7 +110,7 @@ const QRCodeForm = () => {
 
 
     const downloadQRCode = () => {
-        html2canvas(qrCodeRef.current).then((canvas) => {
+        html2canvas(qrCodeRef.current, { scale: 10 }).then((canvas) => {
             const link = document.createElement('a');
             link.download = 'QRCode.png';
             link.href = canvas.toDataURL('image/png');
@@ -119,7 +119,7 @@ const QRCodeForm = () => {
     };
 
     const downloadQRCode2 = () => {
-        html2canvas(qrCodeRef2.current).then((canvas) => {
+        html2canvas(qrCodeRef2.current, { scale: 10 }).then((canvas) => {
             const link = document.createElement('a');
             link.download = 'QRCode.png';
             link.href = canvas.toDataURL('image/png');
@@ -213,7 +213,7 @@ const QRCodeForm = () => {
                 }} className='button-form'>Genereaza QR</div>
                 {isGenerateClicked && <>
                     <div className="qr-code-container">
-                        <div ref={qrCodeRef}><QRCode value={generateQRCodeText()} /></div>
+                        <div ref={qrCodeRef}><QRCodeSVG value={generateQRCodeText()} renderAs='svg' className='qr' /></div>
                     </div>
                     <div onClick={downloadQRCode} className='download-qr'><DownloadIcon fontSize='large' />Download</div>
                 </>}
@@ -222,7 +222,7 @@ const QRCodeForm = () => {
                 <div className='form-wrapper'>
                     <textarea onChange={(e) => setInputText(e.target.value)} className='text-mode-input'></textarea>
                     <div className="qr-code-container">
-                        <div ref={qrCodeRef2}><QRCode value={inputText} /></div>
+                        <div ref={qrCodeRef2}><QRCodeSVG value={inputText} renderAs='svg' className='qr' /></div>
                     </div>
                     <div onClick={downloadQRCode2} className='download-qr'><DownloadIcon fontSize='large' />Download</div>
                 </div>}
