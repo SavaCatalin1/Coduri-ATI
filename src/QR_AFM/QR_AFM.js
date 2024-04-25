@@ -110,7 +110,7 @@ const QRCodeForm = () => {
 
 
     const downloadQRCode = () => {
-        html2canvas(qrCodeRef.current, { scale: 10 }).then((canvas) => {
+        html2canvas(qrCodeRef.current, { scale: 5 }).then((canvas) => {
             const link = document.createElement('a');
             link.download = 'QRCode.png';
             link.href = canvas.toDataURL('image/png');
@@ -119,7 +119,7 @@ const QRCodeForm = () => {
     };
 
     const downloadQRCode2 = () => {
-        html2canvas(qrCodeRef2.current, { scale: 10 }).then((canvas) => {
+        html2canvas(qrCodeRef2.current, { scale: 5 }).then((canvas) => {
             const link = document.createElement('a');
             link.download = 'QRCode.png';
             link.href = canvas.toDataURL('image/png');
