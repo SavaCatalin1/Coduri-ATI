@@ -117,7 +117,7 @@ const Home = ({ existingCodes, fetch }) => {
                         <option value={"200"}>Scule</option>
                     </select>
                 </div>
-                <div onClick={handleAICategory} className='auto-ai'><AutoFixHighIcon fontSize='large' />AUTO</div>
+                <div onClick={handleAICategory} className='auto-ai noselect'><AutoFixHighIcon fontSize='large' />AUTO</div>
 
             </div>
             <button onClick={handleGenerateCode} className='noselect button'>Genereaza Cod</button>
