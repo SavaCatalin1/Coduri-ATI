@@ -76,6 +76,7 @@ const Home = ({ existingCodes, fetch }) => {
 
     return (
         <div className='home-flex'>
+            <Analytics/>
             <div>
                 <div className='group noselect'>Denumire produs</div>
                 <input onChange={(e) => setName(e.target.value)} className='width'></input>
@@ -131,7 +132,7 @@ const Home = ({ existingCodes, fetch }) => {
                     <span className='noselect'>Pretul de vanzare:</span> <b>{pretVanzare}</b>
                 </div>
             )} */}
-            <Analytics/>
+            
         </div>
     )
 }
