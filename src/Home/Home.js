@@ -4,7 +4,7 @@ import { db } from '../firebase'
 import { addDoc, collection } from '@firebase/firestore'
 import Axios from 'axios'; // Import Axios for making HTTP requests
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-
+import { Analytics } from "@vercel/analytics/react"
 
 const Home = ({ existingCodes, fetch }) => {
     const [category, setCategory] = useState("101");
@@ -131,6 +131,7 @@ const Home = ({ existingCodes, fetch }) => {
                     <span className='noselect'>Pretul de vanzare:</span> <b>{pretVanzare}</b>
                 </div>
             )} */}
+            <Analytics/>
         </div>
     )
 }
