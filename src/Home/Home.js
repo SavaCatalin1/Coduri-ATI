@@ -4,7 +4,6 @@ import { db } from '../firebase'
 import { addDoc, collection } from '@firebase/firestore'
 import Axios from 'axios'; // Import Axios for making HTTP requests
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-import { Analytics } from "@vercel/analytics/react"
 
 const Home = ({ existingCodes, fetch }) => {
     const [category, setCategory] = useState("101");
@@ -76,7 +75,6 @@ const Home = ({ existingCodes, fetch }) => {
 
     return (
         <div className='home-flex'>
-            <Analytics/>
             <div>
                 <div className='group noselect'>Denumire produs</div>
                 <input onChange={(e) => setName(e.target.value)} className='width'></input>
