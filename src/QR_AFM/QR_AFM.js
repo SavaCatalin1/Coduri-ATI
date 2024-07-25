@@ -228,6 +228,7 @@ const QRCodeForm = () => {
                         <div ref={qrCodeRef}><QRCodeSVG value={generateQRCodeText()} renderAs='svg' className='qr' /></div>
                     </div>
                     <div onClick={downloadQRCode} className='download-qr'><DownloadIcon fontSize='large' />Download</div>
+                    <div className='qrtext'>{generateQRCodeText()}</div>
                 </>}
             </div>}
             {mode === true &&

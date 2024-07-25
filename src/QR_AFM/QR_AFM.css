@@ -110,3 +110,8 @@ select {
     width: 20rem;
     height: 20rem;
 }
+
+.qrtext {
+    margin-top: 1rem;
+    font-size: 1.4rem;
+}
