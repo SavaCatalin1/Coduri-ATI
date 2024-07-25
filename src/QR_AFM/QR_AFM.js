@@ -191,8 +191,6 @@ const QRCodeForm = () => {
 
                     </div>
                     <div className='form-part3'>
-                        <div type="button" onClick={handleAddSerieIdentificareInvertor} className='button-form'>Invertor +</div>
-
                         {formData.serieIdentificareInvertor.map((serie, index) => (
                             <div key={index} className='panou-item'>
                                 <label className='form-label'>Serie de identificare invertor {index + 1}</label>
@@ -203,8 +201,7 @@ const QRCodeForm = () => {
                                 />
                             </div>
                         ))}
-
-                        <div type="button" onClick={handleAddSerieIdentificarePanou} className='button-form'>Panou +</div>
+                        <div type="button" onClick={handleAddSerieIdentificareInvertor} className='button-form'>Invertor +</div>
 
                         {formData.serieIdentificarePanou.map((serie, index) => (
                             <div key={index} className='panou-item'>
@@ -217,6 +214,7 @@ const QRCodeForm = () => {
                             </div>
                         ))}
 
+                        <div type="button" onClick={handleAddSerieIdentificarePanou} className='button-form'>Panou +</div>
                     </div>
                 </form>
                 <div onClick={() => {
