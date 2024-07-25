@@ -72,6 +72,17 @@ const QRCodeForm = () => {
         });
     };
 
+    const Capitalize = (text) => {
+        return text.slice(0, 1).toUpperCase() + text.slice(1, text.length)
+    }
+
+    const capitalizeWords = (str) => {
+        return str
+            .split('-')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join('-');
+    }
+
 
     const generateQRCodeText = () => {
         const {
@@ -93,7 +104,7 @@ const QRCodeForm = () => {
         const updatedNumePrenume = numePrenume.replace(/\s/g, '-');
         const updatedPutereInstalata = putereInstalata.replace('.', ',');
 
-        let qrCodeText = `${tipSolicitant}|${numarFactura}|${dataFactura?.toLocaleDateString('en-GB')}|${judet}|${comunaOras}|${sectorSat}|${numeStrada}|${nrStrada}|${updatedNumePrenume}|${cnpCif}|${updatedPutereInstalata}`;
+        let qrCodeText = `${tipSolicitant}|${numarFactura}|${dataFactura?.toLocaleDateString('en-GB')}|${Capitalize(judet)}|${Capitalize(comunaOras)}|${Capitalize(sectorSat)}|${Capitalize(numeStrada)}|${nrStrada}|${capitalizeWords(updatedNumePrenume)}|${cnpCif}|${updatedPutereInstalata}`;
 
         serieIdentificareInvertor.forEach((serie, index) => {
             qrCodeText += `|${serieIdentificareInvertor[index]}`;
@@ -105,6 +116,7 @@ const QRCodeForm = () => {
             qrCodeText += `|${serieIdentificarePanou[index]}`;
         });
 
+        console.log('QR Code Text:', qrCodeText);
         return qrCodeText;
     };
 
