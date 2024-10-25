@@ -17,7 +17,7 @@ import { doc, updateDoc } from '@firebase/firestore';
 import { db } from '../firebase';
 // import Import from "./Import/Import"
 
-const Produse = ({ produse, fetch }) => {
+const Produse = ({ produse, setProduse }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedLabels, setSelectedLabels] = useState([]);
     const [selectedEmptyLabels, setSelectedEmptyLabels] = useState([]);
@@ -142,21 +142,46 @@ const Produse = ({ produse, fetch }) => {
     };
 
     const sendRating = async (item) => {
-        console.log(item.Cod)
-        let sendData = {
-            'name': item.Denumire,
-            'category': item.Cod.substring(0, 3)
-        }
-        console.log(sendData)
-        axios.post(`https://savacatalin.pythonanywhere.com/add_data`, sendData, {
-            headers: {
-                'Content-Type': 'application/json',
+        console.log(item.Cod);
+        const sendData = {
+            name: item.Denumire,
+            category: item.Cod.substring(0, 3),
+        };
+    
+        // Send rating data to external API
+        try {
+            await axios.post(`https://savacatalin.pythonanywhere.com/add_data`, sendData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+    
+            // Update the feedback in Firestore
+            await updateDoc(doc(db, "produse", item.id), {
+                feedback: 1
+            });
+    
+            // Update local state without fetching all data
+            setProduse((prevProduse) =>
+                prevProduse.map((produs) =>
+                    produs.id === item.id ? { ...produs, feedback: 1 } : produs
+                )
+            );
+    
+            // Update localStorage with the new feedback state
+            const cachedData = JSON.parse(localStorage.getItem("produseData"));
+            if (cachedData) {
+                const updatedData = cachedData.data.map((produs) =>
+                    produs.id === item.id ? { ...produs, feedback: 1 } : produs
+                );
+                localStorage.setItem("produseData", JSON.stringify({ ...cachedData, data: updatedData }));
             }
-        })
-        await updateDoc(doc(db, "produse", item.id), {
-            feedback: 1
-        }).then(() => fetch());
-    }
+    
+        } catch (error) {
+            console.error("Error updating rating:", error);
+        }
+    };
+    
 
     return (
         <div className='margin'>

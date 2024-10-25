@@ -5,7 +5,9 @@ import { addDoc, collection } from '@firebase/firestore'
 import Axios from 'axios'; // Import Axios for making HTTP requests
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
-const Home = ({ existingCodes, fetch }) => {
+const CACHE_KEY = "produseData"; // Or import if defined in a config file
+
+const Home = ({ existingCodes, fetch, setExistingCodes, setProduse }) => {
     const [category, setCategory] = useState("101");
     const [generatedCode, setGeneratedCode] = useState('');
     const [name, setName] = useState(null);
@@ -21,16 +23,36 @@ const Home = ({ existingCodes, fetch }) => {
                 try {
                     const timestamp = Date.now();
                     setPretVanzare(Number(pretAchizitie) + (Number(pretAchizitie) * 20 / 100));
-                    await addDoc(collection(db, "produse"), { Denumire: name.toUpperCase(), Cod: uniqueCode, feedback: 0, Created: timestamp, Pret: Number(Number(pretAchizitie) + (Number(pretAchizitie) * 20 / 100)) }).then(() => fetch())
+
+                    // New product data
+                    const newProduct = {
+                        Denumire: name.toUpperCase(),
+                        Cod: uniqueCode,
+                        feedback: 0,
+                        Created: timestamp,
+                        Pret: Number(Number(pretAchizitie) + (Number(pretAchizitie) * 20 / 100)),
+                    };
+
+                    // Add to Firestore
+                    await addDoc(collection(db, "produse"), newProduct);
+
+                    // Update local state and existing codes
+                    setExistingCodes((prevCodes) => [...prevCodes, uniqueCode]);
+                    setProduse((prevProduse) => [...prevProduse, { id: uniqueCode, ...newProduct }]);
+
+                    // Update localStorage with new product data
+                    const cachedData = JSON.parse(localStorage.getItem(CACHE_KEY)) || { data: [], timestamp: Date.now() };
+                    cachedData.data.push({ id: uniqueCode, ...newProduct });
+                    localStorage.setItem(CACHE_KEY, JSON.stringify(cachedData));
+
                 } catch (e) {
                     console.error("Error adding document: ", e);
                 }
             } else {
                 generateUniqueCode(); // Regenerate code if not unique
             }
-        }
-        else {
-            alert("Nu exista coduri!")
+        } else {
+            alert("Nu exista coduri!");
         }
     };
 
@@ -130,7 +152,7 @@ const Home = ({ existingCodes, fetch }) => {
                     <span className='noselect'>Pretul de vanzare:</span> <b>{pretVanzare}</b>
                 </div>
             )} */}
-            
+
         </div>
     )
 }
