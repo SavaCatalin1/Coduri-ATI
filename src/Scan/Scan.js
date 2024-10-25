@@ -38,7 +38,6 @@ const Scan = ({ produse }) => {
 
     const processScan = (code) => {
         if (code.trim().length !== 10) {
-            alert("Invalid barcode length. Barcodes must be 10 digits.");
             return;
         }
 
@@ -71,19 +70,19 @@ const Scan = ({ produse }) => {
             setQuantity("");
             setIsPromptQuantity(false);
         } else {
-            alert("Please enter a valid quantity.");
+            alert("Introduceti o cantitate valida.");
         }
     };
 
     // Function to save the scanned codes and quantities in Firestore collection "avize"
     const saveToFirestore = async () => {
         if (scannedCodes.length === 0) {
-            alert("No products scanned to save.");
+            alert("Nu s-au scanat produse.");
             return;
         }
 
         if (!title.trim()) {
-            alert("Please enter a title for the document.");
+            alert("Adaugati un titlu.");
             return;
         }
 
@@ -96,7 +95,7 @@ const Scan = ({ produse }) => {
                 verified: false
             });
 
-            alert(`Document saved with ID: ${docRef.id}`);
+            alert(`Aviz salvat!`);
 
             // Reset the form after saving
             setScannedCodes([]);
@@ -113,7 +112,7 @@ const Scan = ({ produse }) => {
         if (title.trim()) {
             setIsTitleConfirmed(true); // Allow scanning when title is confirmed
         } else {
-            alert("Please enter a valid title.");
+            alert("Introduceti un titlu valid.");
         }
     };
 
