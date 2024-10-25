@@ -147,7 +147,7 @@ const Produse = ({ produse, setProduse }) => {
             name: item.Denumire,
             category: item.Cod.substring(0, 3),
         };
-    
+
         // Send rating data to external API
         try {
             await axios.post(`https://savacatalin.pythonanywhere.com/add_data`, sendData, {
@@ -155,19 +155,19 @@ const Produse = ({ produse, setProduse }) => {
                     'Content-Type': 'application/json',
                 }
             });
-    
+
             // Update the feedback in Firestore
             await updateDoc(doc(db, "produse", item.id), {
                 feedback: 1
             });
-    
+
             // Update local state without fetching all data
             setProduse((prevProduse) =>
                 prevProduse.map((produs) =>
                     produs.id === item.id ? { ...produs, feedback: 1 } : produs
                 )
             );
-    
+
             // Update localStorage with the new feedback state
             const cachedData = JSON.parse(localStorage.getItem("produseData"));
             if (cachedData) {
@@ -176,12 +176,12 @@ const Produse = ({ produse, setProduse }) => {
                 );
                 localStorage.setItem("produseData", JSON.stringify({ ...cachedData, data: updatedData }));
             }
-    
+
         } catch (error) {
             console.error("Error updating rating:", error);
         }
     };
-    
+
 
     return (
         <div className='margin'>
@@ -266,7 +266,7 @@ const Produse = ({ produse, setProduse }) => {
                     )}
                 </div>
                 {!filteredProduse && <ClockLoader color="#000080" className='margin-loading' />}
-                <div>
+                <div className='A4'>
                     {filteredProduse && <div className="selected-labels">
                         <div className='options-page'>
                             <div className='print-cont'><ReactToPrint

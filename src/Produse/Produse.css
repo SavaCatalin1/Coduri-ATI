@@ -345,6 +345,10 @@
 }
 
 @media screen and (max-width: 1024px) {
+    .A4{
+        display: none;
+    }
+
     .sort{
         margin-bottom: 3rem;
         margin-left: 2rem;
