@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { collection, addDoc } from "firebase/firestore"; // Import Firestore functions
-import { db } from "../firebase";  // Adjust based on your Firebase config file path
-import "./Scan.css"
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { Html5Qrcode } from "html5-qrcode";
+import "./Scan.css";
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 
 const Scan = ({ produse }) => {
     const [scannedCodes, setScannedCodes] = useState([]);
@@ -10,61 +13,100 @@ const Scan = ({ produse }) => {
     const [quantity, setQuantity] = useState("");
     const [isPromptQuantity, setIsPromptQuantity] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [buffer, setBuffer] = useState(""); // To buffer the input from scanner
-    const [title, setTitle] = useState(""); // To store the title of the document
-    const [isTitleConfirmed, setIsTitleConfirmed] = useState(false); // To track if title is confirmed
+    const [title, setTitle] = useState("");
+    const [isTitleConfirmed, setIsTitleConfirmed] = useState(false);
+    const [cameraEnabled, setCameraEnabled] = useState(false);
+    const [cameraError, setCameraError] = useState(null);
+    const [html5QrCode, setHtml5QrCode] = useState(null);
+    const [buffer, setBuffer] = useState(""); // Initialize buffer state for handling key inputs
+
 
     useEffect(() => {
-        if (!isTitleConfirmed) return; // Only add key listener if title is confirmed
+        if (!isTitleConfirmed) return;
 
         const handleKeyDown = (e) => {
-            // Check if input is a number or Enter key
             if (e.key >= "0" && e.key <= "9") {
-                setBuffer((prev) => prev + e.key); // Append digit to the buffer
+                setBuffer((prev) => prev + e.key);
             } else if (e.key === "Enter") {
-                processScan(buffer); // Process barcode when Enter is pressed
-                setBuffer(""); // Clear buffer after processing
+                processScan(buffer);
+                setBuffer("");
             }
         };
 
-        // Add event listener for keydown
         window.addEventListener("keydown", handleKeyDown);
 
-        // Clean up event listener on component unmount
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [buffer, isTitleConfirmed]); // Re-run effect if buffer or isTitleConfirmed changes
+    }, [buffer, isTitleConfirmed]);
 
     const processScan = (code) => {
-        if (code.trim().length !== 10) {
-            return;
-        }
+        code = String(code).trim(); // Ensure `code` is always a string
+        if (code.length !== 10) return;
 
-        setIsLoading(true); // Start loading
-
-        // Search for the product in the produse array
+        setIsLoading(true);
         const foundProduct = produse.find((product) => product.Cod === code);
 
         if (foundProduct) {
             setCurrentScan(code);
             setDenumire(foundProduct.Denumire);
-            setIsPromptQuantity(true); // Prompt for quantity input
+            setIsPromptQuantity(true);
         } else {
-            alert("Product not found");
+            alert("Produsul nu a fost gasit");
             setDenumire("");
         }
 
-        setIsLoading(false); // End loading after product search
+        setIsLoading(false);
     };
 
-    // Function to handle the quantity input and save the scanned product
+    const startScanning = () => {
+        // Initialize html5QrCode if it hasn't been initialized
+        if (!html5QrCode) {
+            const qrCodeScanner = new Html5Qrcode("reader");
+            setHtml5QrCode(qrCodeScanner);
+
+            // Start scanning after initialization
+            qrCodeScanner
+                .start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: { width: 250, height: 250 } },
+                    (decodedText) => handleCameraScan(decodedText),
+                    (errorMessage) => setCameraError(errorMessage)
+                )
+                .catch((err) => setCameraError(`Eroare accesând camera: ${err}`));
+        } else {
+            // If already initialized, start directly
+            html5QrCode
+                .start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: { width: 250, height: 250 } },
+                    (decodedText) => handleCameraScan(decodedText),
+                    (errorMessage) => setCameraError(errorMessage)
+                )
+                .catch((err) => setCameraError(`Eroare accesând camera: ${err}`));
+        }
+    };
+
+    const stopScanning = () => {
+        if (html5QrCode) {
+            html5QrCode.stop().then(() => {
+                console.log("Camera stopped.");
+            }).catch((err) => console.error("Failed to stop camera", err));
+        }
+    };
+
+    const handleCameraScan = (code) => {
+        if (code) {
+            processScan(code);
+            stopScanning(); // Stop the camera after a successful scan if desired
+        }
+    };
+
     const handleQuantitySubmit = () => {
         if (quantity && denumire) {
             const newEntry = { Cod: currentScan, Denumire: denumire, Quantity: quantity };
             setScannedCodes([...scannedCodes, newEntry]);
 
-            // Reset for the next scan
             setCurrentScan("");
             setDenumire("");
             setQuantity("");
@@ -74,7 +116,6 @@ const Scan = ({ produse }) => {
         }
     };
 
-    // Function to save the scanned codes and quantities in Firestore collection "avize"
     const saveToFirestore = async () => {
         if (scannedCodes.length === 0) {
             alert("Nu s-au scanat produse.");
@@ -87,30 +128,27 @@ const Scan = ({ produse }) => {
         }
 
         try {
-            const now = new Date(); // Get the current date and time
-            const docRef = await addDoc(collection(db, "avize"), {
+            const now = new Date();
+            await addDoc(collection(db, "avize"), {
                 title,
                 scannedCodes,
                 timestamp: now.toISOString(),
-                verified: false
+                verified: false,
             });
 
             alert(`Aviz salvat!`);
-
-            // Reset the form after saving
             setScannedCodes([]);
-            setTitle(""); // Clear title after saving
-            setIsTitleConfirmed(false); // Reset title confirmation
+            setTitle("");
+            setIsTitleConfirmed(false);
         } catch (e) {
             console.error("Error saving document: ", e);
-            alert("Error saving document");
+            alert("Eroare la salvarea documentului");
         }
     };
 
-    // Function to confirm the title and enable scanning
     const confirmTitle = () => {
         if (title.trim()) {
-            setIsTitleConfirmed(true); // Allow scanning when title is confirmed
+            setIsTitleConfirmed(true);
         } else {
             alert("Introduceti un titlu valid.");
         }
@@ -120,7 +158,6 @@ const Scan = ({ produse }) => {
         <div className="scanner-container">
             <h1 className="scanner-title">Scanare Coduri</h1>
 
-            {/* Title input section */}
             {!isTitleConfirmed ? (
                 <div className="title-input-container">
                     <input
@@ -136,17 +173,29 @@ const Scan = ({ produse }) => {
                 </div>
             ) : (
                 <>
-                    {/* Display the confirmed title */}
                     <div className="confirmed-title-container">
                         <span className="confirmed-title">
                             <strong>Titlu:</strong> {title}
                         </span>
                     </div>
 
-                    {/* Display loading state */}
+                    <button onClick={() => {
+                        if (cameraEnabled) {
+                            stopScanning();
+                        } else {
+                            startScanning();
+                        }
+                        setCameraEnabled(!cameraEnabled);
+                    }} className="toggle-camera-button">
+                        {cameraEnabled ? <CameraAltIcon fontSize="large"/> : <DocumentScannerIcon fontSize="large"/>}
+                    </button>
+
+                    <div id="reader" style={{ width: "100%", margin: "auto" }}></div>
+
+                    {/* {cameraError && <p className="camera-error">{cameraError}</p>} */}
+
                     {isLoading && <p className="loading-text">Cautare produs...</p>}
 
-                    {/* Display scanned product name and prompt for quantity */}
                     {denumire && isPromptQuantity && (
                         <div className="quantity-input-container">
                             <h2 className="product-name">Produs: {denumire}</h2>
@@ -163,7 +212,6 @@ const Scan = ({ produse }) => {
                         </div>
                     )}
 
-                    {/* Display scanned codes */}
                     <div className="scanned-products-container">
                         <h3 className="scanned-products-title">Produse scanate:</h3>
                         <ul className="scanned-products-list">
@@ -176,7 +224,6 @@ const Scan = ({ produse }) => {
                         </ul>
                     </div>
 
-                    {/* Save scanned codes */}
                     <button className="save-button" onClick={saveToFirestore}>
                         Salveaza Aviz
                     </button>

@@ -3,3 +3,11 @@
     width: 88%;
     margin-left: 12%;
 }
+
+@media (max-width: 768px) {
+    /* Hide full navbar on mobile and show menu icon */
+    .page-flex {
+        width: 100%;
+        margin-left: 0;
+    }
+}
