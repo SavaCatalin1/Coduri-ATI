@@ -18,8 +18,11 @@ const Scan = ({ produse }) => {
     const [cameraEnabled, setCameraEnabled] = useState(false);
     const [cameraError, setCameraError] = useState(null);
     const [html5QrCode, setHtml5QrCode] = useState(null);
-    const [buffer, setBuffer] = useState(""); // Initialize buffer state for handling key inputs
-
+    const [buffer, setBuffer] = useState("");
+    const [showSeriesModal, setShowSeriesModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [seriesCodes, setSeriesCodes] = useState([]);
+    const [isSeriesScanning, setIsSeriesScanning] = useState(false);
 
     useEffect(() => {
         if (!isTitleConfirmed) return;
@@ -41,8 +44,14 @@ const Scan = ({ produse }) => {
     }, [buffer, isTitleConfirmed]);
 
     const processScan = (code) => {
-        code = String(code).trim(); // Ensure `code` is always a string
+        code = String(code).trim();
         if (code.length !== 10) return;
+
+        const alreadyScanned = scannedCodes.some((scanned) => scanned.Cod === code);
+        if (alreadyScanned) {
+            alert("Produsul a fost deja scanat");
+            return;
+        }
 
         setIsLoading(true);
         const foundProduct = produse.find((product) => product.Cod === code);
@@ -60,12 +69,10 @@ const Scan = ({ produse }) => {
     };
 
     const startScanning = () => {
-        // Initialize html5QrCode if it hasn't been initialized
         if (!html5QrCode) {
             const qrCodeScanner = new Html5Qrcode("reader");
             setHtml5QrCode(qrCodeScanner);
 
-            // Start scanning after initialization
             qrCodeScanner
                 .start(
                     { facingMode: "environment" },
@@ -75,7 +82,6 @@ const Scan = ({ produse }) => {
                 )
                 .catch((err) => setCameraError(`Eroare accesând camera: ${err}`));
         } else {
-            // If already initialized, start directly
             html5QrCode
                 .start(
                     { facingMode: "environment" },
@@ -98,13 +104,13 @@ const Scan = ({ produse }) => {
     const handleCameraScan = (code) => {
         if (code) {
             processScan(code);
-            stopScanning(); // Stop the camera after a successful scan if desired
+            stopScanning();
         }
     };
 
     const handleQuantitySubmit = () => {
         if (quantity && denumire) {
-            const newEntry = { Cod: currentScan, Denumire: denumire, Quantity: quantity };
+            const newEntry = { Cod: currentScan, Denumire: denumire, Quantity: quantity, Series: [] };
             setScannedCodes([...scannedCodes, newEntry]);
 
             setCurrentScan("");
@@ -154,6 +160,51 @@ const Scan = ({ produse }) => {
         }
     };
 
+    const handleProductClick = (product) => {
+        setSelectedProduct(product);
+        setShowSeriesModal(true);
+        setSeriesCodes(product.Series || []);
+    };
+
+    const handleSeriesScan = (code) => {
+        if (code && !seriesCodes.includes(code)) {
+            setSeriesCodes([...seriesCodes, code]);
+            setSelectedProduct((prevProduct) => ({
+                ...prevProduct,
+                Series: [...prevProduct.Series, code],
+            }));
+        }
+    };
+
+    const startSeriesScan = () => {
+        setIsSeriesScanning(true);
+        if (html5QrCode) {
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: { width: 250, height: 250 } },
+                handleSeriesScan,
+                (errorMessage) => setCameraError(errorMessage)
+            );
+        }
+    };
+
+    const stopSeriesScan = () => {
+        if (html5QrCode) {
+            html5QrCode.stop()
+                .then(() => setIsSeriesScanning(false))
+                .catch((err) => console.error("Failed to stop series scan", err));
+        }
+    };
+
+    const saveSeriesToProduct = () => {
+        const updatedScannedCodes = scannedCodes.map((item) =>
+            item.Cod === selectedProduct.Cod ? { ...item, Series: seriesCodes } : item
+        );
+        setScannedCodes(updatedScannedCodes);
+        setShowSeriesModal(false);
+        stopSeriesScan();
+    };
+
     return (
         <div className="scanner-container">
             <h1 className="scanner-title">Scanare Coduri</h1>
@@ -187,12 +238,10 @@ const Scan = ({ produse }) => {
                         }
                         setCameraEnabled(!cameraEnabled);
                     }} className="toggle-camera-button">
-                        {cameraEnabled ? <CameraAltIcon fontSize="large"/> : <DocumentScannerIcon fontSize="large"/>}
+                        {cameraEnabled ? <CameraAltIcon fontSize="large" className="marginno"/> : <DocumentScannerIcon fontSize="large"  className="marginno"/>}
                     </button>
 
                     <div id="reader" style={{ width: "100%", margin: "auto" }}></div>
-
-                    {/* {cameraError && <p className="camera-error">{cameraError}</p>} */}
 
                     {isLoading && <p className="loading-text">Cautare produs...</p>}
 
@@ -216,7 +265,7 @@ const Scan = ({ produse }) => {
                         <h3 className="scanned-products-title">Produse scanate:</h3>
                         <ul className="scanned-products-list">
                             {scannedCodes.map((item, index) => (
-                                <li className="scanned-product-item" key={index}>
+                                <li className="scanned-product-item" key={index} onClick={() => handleProductClick(item)}>
                                     <div>{item.Denumire} (Cod: {item.Cod})</div>
                                     <div><b>Cantitate:</b> {item.Quantity}</div>
                                 </li>
@@ -227,6 +276,28 @@ const Scan = ({ produse }) => {
                     <button className="save-button" onClick={saveToFirestore}>
                         Salveaza Aviz
                     </button>
+
+                    {/* Series Modal */}
+                    {showSeriesModal && (
+                        <div className="modal">
+                            <div className="modal-content">
+                                <h2>Scan Series for {selectedProduct.Denumire}</h2>
+                                <button className="close-button" onClick={() => setShowSeriesModal(false)}>Close</button>
+                                <button
+                                    className="scan-series-button"
+                                    onClick={isSeriesScanning ? stopSeriesScan : startSeriesScan}
+                                >
+                                    {isSeriesScanning ? "Stop Series Scan" : "Start Series Scan"}
+                                </button>
+                                <ul>
+                                    {seriesCodes.map((code, index) => (
+                                        <li key={index}>{code}</li>
+                                    ))}
+                                </ul>
+                                <button onClick={saveSeriesToProduct} className="save-series-button">Save Series</button>
+                            </div>
+                        </div>
+                    )}
                 </>
             )}
         </div>
