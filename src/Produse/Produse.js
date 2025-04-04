@@ -13,7 +13,7 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import CheckIcon from '@mui/icons-material/Check';
 import { v1 as uuidv1 } from 'uuid';
 import axios from 'axios';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from '@firebase/firestore';
 import { db } from '../firebase';
 // import Import from "./Import/Import"
 
@@ -160,7 +160,8 @@ const Produse = ({ produse, setProduse }) => {
             await updateDoc(doc(db, "produse", item.id), {
                 feedback: 1
             });
-
+            console.log(produse)
+            console.log(item)
             // Update local state without fetching all data
             setProduse((prevProduse) =>
                 prevProduse.map((produs) =>

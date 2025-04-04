@@ -62,7 +62,7 @@ function App() {
           <div className="page-flex">
             <Routes>
               <Route path='/' element={<Home existingCodes={existingCodes} fetch={fetch} setExistingCodes={setExistingCodes} setProduse={setProduse}/>} />
-              <Route path='/produse' element={<Produse produse={produse} />} />
+              <Route path='/produse' element={<Produse produse={produse} setProduse={setProduse}/>} />
               <Route path='/qrafm' element={<QR_AFM />} />
               <Route path='/scan' element={<Scan produse={produse} setProduse={setProduse}/>} />
               <Route path='/avize' element={<AvizList />} />
