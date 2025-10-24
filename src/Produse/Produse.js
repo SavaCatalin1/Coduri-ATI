@@ -29,6 +29,8 @@ const Produse = ({ produse, setProduse }) => {
     const [bool, setBool] = useState(false)
     const [twoColumnLayout, setTwoColumnLayout] = useState(false);
     const [ITEMS_PER_PAGE, setITEMS_PER_PAGE] = useState(48);
+    // Separate page size for product list (left pane)
+    const PRODUCTS_PER_PAGE = 10;   
 
     // Define categories and their mappings
     const categories = {
@@ -71,6 +73,8 @@ const Produse = ({ produse, setProduse }) => {
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
+        // Ensure we show results on the first page when the query changes
+        setCurrentPage(1);
     };
 
     const handleAddToLabels = (produs) => {
@@ -103,8 +107,7 @@ const Produse = ({ produse, setProduse }) => {
     };
 
     const handleNextPage = () => {
-        if (endIndex < produse.length)
-            setCurrentPage(currentPage + 1);
+        if (endIndex < filteredProduse.length) setCurrentPage(currentPage + 1);
     };
 
     const handlePrevPage = () => {
@@ -127,19 +130,31 @@ const Produse = ({ produse, setProduse }) => {
         return sortOrder === 'ascending' ? dateA - dateB : dateB - dateA;
     });
 
-    const filteredProduse = sortedProduse
-        ?.filter(produs =>
-            produs.Denumire.toLowerCase().includes(searchQuery.toLowerCase())
+    // Normalize helper for robust, diacritic-insensitive search
+    const normalizeText = (s) => (s?.toString()?.toLowerCase()?.normalize('NFD')?.replace(/[\u0300-\u036f]/g, '')?.trim()) || '';
+
+    const filteredProduse = sortedProduse?.filter((produs) => {
+        const q = normalizeText(searchQuery);
+        if (!q) return true;
+        const name = normalizeText(produs?.Denumire);
+        const code = normalizeText(produs?.Cod);
+        const categoryName = normalizeText(getCategoryFromCode(produs?.Cod));
+        return (
+            name.includes(q) ||
+            code.includes(q) ||
+            categoryName.includes(q)
         );
+    });
 
-    const startIndex = (currentPage - 1) * 10;
-    const endIndex = startIndex + 10;
+    const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+    const endIndex = startIndex + PRODUCTS_PER_PAGE;
 
 
-    const getCategoryFromCode = (code) => {
-        const categoryCode = code.substring(0, 3);
+    function getCategoryFromCode(code) {
+        const codeStr = typeof code === 'string' ? code : (code != null ? String(code) : '');
+        const categoryCode = codeStr.substring(0, 3);
         return categories[categoryCode] || 'Unknown Category';
-    };
+    }
 
     const sendRating = async (item) => {
         console.log(item.Cod);
@@ -218,10 +233,10 @@ const Produse = ({ produse, setProduse }) => {
                             className='input' />
                         <SearchIcon fontSize='large' sx={{ color: "#000080" }} />
                     </div>
-                    {produse.length > ITEMS_PER_PAGE && (
+                    {filteredProduse && filteredProduse.length > PRODUCTS_PER_PAGE && (
                         <div className="pagination">
                             <div onClick={handlePrevPage} className={currentPage === 1 ? 'arrow-disabled' : 'page-arrow'}><ArrowLeftIcon fontSize='large' /></div>
-                            <div onClick={handleNextPage} disabled={endIndex >= produse.length} className={endIndex >= produse.length ? 'arrow-disabled' : 'page-arrow'}><ArrowRightIcon fontSize='large' /></div>
+                            <div onClick={handleNextPage} disabled={endIndex >= filteredProduse.length} className={endIndex >= filteredProduse.length ? 'arrow-disabled' : 'page-arrow'}><ArrowRightIcon fontSize='large' /></div>
                         </div>
                     )}
                 </div>
@@ -259,10 +274,10 @@ const Produse = ({ produse, setProduse }) => {
                             </div>
                         </div>
                     ))}
-                    {produse.length > ITEMS_PER_PAGE && (
+                    {filteredProduse && filteredProduse.length > PRODUCTS_PER_PAGE && (
                         <div className="pagination-1">
                             <div onClick={handlePrevPage} className={currentPage === 1 ? 'arrow-disabled' : 'page-arrow'}><ArrowLeftIcon fontSize='large' /></div>
-                            <div onClick={handleNextPage} disabled={endIndex >= produse.length} className={endIndex >= produse.length ? 'arrow-disabled' : 'page-arrow'}><ArrowRightIcon fontSize='large' /></div>
+                            <div onClick={handleNextPage} disabled={endIndex >= filteredProduse.length} className={endIndex >= filteredProduse.length ? 'arrow-disabled' : 'page-arrow'}><ArrowRightIcon fontSize='large' /></div>
                         </div>
                     )}
                 </div>
